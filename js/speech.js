@@ -152,16 +152,37 @@ export function speakAndWait(text, language = lang) {
     queued.add(utterance);
     utterance.addEventListener('end', () => finish(true));
     utterance.addEventListener('error', () => finish(false));
-    // Страховка от зависшего сетевого голоса: сбросить синтезатор и идти дальше
-    // (после паузы — иначе следующая фраза потеряется, см. CANCEL_GAP).
-    guard = setTimeout(() => {
+    // Фраза не началась (телефон не разрешил озвучку, сетевой голос завис) — сбросить
+    // синтезатор и идти дальше (после паузы, иначе следующая фраза потеряется, см. CANCEL_GAP).
+    const stall = () => {
       speechSynthesis.cancel();
       setTimeout(() => finish(false), CANCEL_GAP);
-    }, 8000 + text.length * 150);
+    };
+    guard = setTimeout(stall, chosen && !chosen.localService ? START_TIMEOUT_NETWORK : START_TIMEOUT_LOCAL + 500);
+    // Началась — ждём end, но не дольше расчётной длительности (~12 знаков в секунду):
+    // на Android Chrome end иногда не приходит. Синтезатор не сбрасываем — если фраза
+    // ещё звучит, следующая просто встанет за ней в очередь.
+    utterance.addEventListener('start', () => {
+      clearTimeout(guard);
+      guard = setTimeout(() => finish(true), 700 + text.length * 80);
+    });
 
     speechSynthesis.resume();
     speechSynthesis.speak(utterance);
   });
+}
+
+// Разрешить озвучку: мобильные браузеры пускают речь, только если первая фраза произнесена
+// прямо в обработчике нажатия. Вызывать синхронно из обработчика клика.
+export function unlockSpeech() {
+  if (!speechSupported()) return;
+  const utterance = new SpeechSynthesisUtterance(' ');
+  utterance.volume = 0;
+  queued.add(utterance);
+  const release = () => queued.delete(utterance);
+  utterance.addEventListener('end', release);
+  utterance.addEventListener('error', release);
+  speechSynthesis.speak(utterance);
 }
 
 // onVoice(found) вызывается, когда становится известно, есть ли в системе голос языка.
