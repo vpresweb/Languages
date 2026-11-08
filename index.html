@@ -13,9 +13,12 @@
   <header class="site-header">
     <div class="header-row">
       <h1><a href="#" id="home-link">Языки</a></h1>
-      <div class="lang-switch" role="radiogroup" aria-label="Язык">
-        <button type="button" role="radio" data-lang="en" aria-checked="true">English</button>
-        <button type="button" role="radio" data-lang="pt" aria-checked="false">Português</button>
+      <div class="header-actions">
+        <div class="lang-switch" role="radiogroup" aria-label="Язык">
+          <button type="button" role="radio" data-lang="en" aria-checked="true">English</button>
+          <button type="button" role="radio" data-lang="pt" aria-checked="false">Português</button>
+        </div>
+        <button type="button" class="account-button" id="account-button" hidden>Войти</button>
       </div>
     </div>
     <nav class="tabs" aria-label="Разделы">
@@ -254,6 +257,37 @@
       </div>
     </section>
   </main>
+
+  <dialog class="account-dialog" id="account-dialog" aria-labelledby="account-title">
+    <div class="account-head">
+      <h2 id="account-title">Вход</h2>
+      <button type="button" class="link-button" id="account-close" aria-label="Закрыть">✕</button>
+    </div>
+    <div id="account-forms">
+      <p class="hint">С учётной записью прогресс — слова, тесты, курсы — сохраняется на сервере
+        и доступен на любом устройстве. У каждого пользователя он свой.</p>
+      <form id="account-form" autocomplete="on">
+        <label id="account-email-row">Email
+          <input type="email" id="account-email" autocomplete="email" required>
+        </label>
+        <label id="account-password-row">Пароль
+          <input type="password" id="account-password" autocomplete="current-password" minlength="6" required>
+        </label>
+        <button type="submit" class="primary" id="account-submit">Войти</button>
+      </form>
+      <p class="account-links" id="account-links">
+        <button type="button" class="link-button" id="account-to-login">Уже есть учётная запись? Войти</button>
+        <button type="button" class="link-button" id="account-to-signup">Нет учётной записи? Зарегистрироваться</button>
+        <button type="button" class="link-button" id="account-to-reset">Забыли пароль?</button>
+      </p>
+    </div>
+    <div id="account-profile" hidden>
+      <p>Вы вошли как <b id="account-who"></b>. Прогресс сохраняется автоматически.</p>
+      <button type="button" class="primary" id="account-logout">Выйти</button>
+      <p class="hint">После выхода прогресс убирается с этого устройства и остаётся в учётной записи.</p>
+    </div>
+    <p class="hint" id="account-status" aria-live="polite"></p>
+  </dialog>
 
   <footer class="site-footer">
     <p class="hint" id="voice-note" hidden></p>

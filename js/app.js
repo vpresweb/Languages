@@ -1,4 +1,4 @@
-// Оболочка: язык (English / Português) и разделы «Словарь», «Слова», «Курсы».
+// Оболочка: язык (English / Português), разделы «Словарь», «Слова», «Курсы» и учётная запись.
 // Адрес: #/<язык>/<раздел>/<подраздел>, например #/en/words/stream или #/pt/courses/a2.
 import { LANGUAGES } from './words/data.js';
 import { loadSettings, saveSettings } from './words/storage.js';
@@ -6,22 +6,22 @@ import { initSpeech, setSpeechLang, stopSpeech } from './speech.js';
 import { createDictionary } from './dictionary-view.js';
 import { createWords } from './words/view.js';
 import { createCourses } from './courses.js';
+import { initAccount, accountConfigured } from './account.js';
+import { initAccountUi } from './account-ui.js';
 
 const $ = (id) => document.getElementById(id);
 const SECTIONS = ['dict', 'words', 'courses'];
 const DEFAULT_SUB = { dict: 'search', words: 'today', courses: '' };
 
-const settings = loadSettings();
-let route = { lang: LANGUAGES[settings.lang] ? settings.lang : 'en', section: 'words', sub: 'today' };
+let route = { lang: 'en', section: 'words', sub: 'today' };
+let dictionary;
+let words;
+let courses;
 
 const href = (lang, section, sub = '') => `#/${lang}/${section}${sub ? `/${sub}` : ''}`;
 const go = (section, sub = '') => { location.hash = href(route.lang, section, sub); };
 
-const dictionary = createDictionary($('dict-section'), { onLearn: () => words.refresh() });
-const words = createWords($('words-section'), { navigate: (sub) => go('words', sub) });
-const courses = createCourses($('courses-section'), { navigate: (id) => go('courses', id) });
-
-export function parseHash(hash, fallbackLang) {
+function parseHash(hash, fallbackLang) {
   const [lang, section, sub] = hash.replace(/^#\/?/, '').split('/');
   const l = LANGUAGES[lang] ? lang : fallbackLang;
   const s = SECTIONS.includes(section) ? section : 'words';
@@ -48,10 +48,7 @@ async function apply() {
   const sectionChanged = next.section !== route.section;
   route = next;
   if (langChanged || sectionChanged) stopSpeech();
-  if (langChanged) {
-    settings.lang = route.lang;
-    saveSettings({ ...loadSettings(), lang: route.lang });
-  }
+  if (langChanged) saveSettings({ ...loadSettings(), lang: route.lang });
   setSpeechLang(route.lang);
   updateLinks();
 
@@ -72,23 +69,48 @@ async function apply() {
   }
 }
 
-document.querySelector('.lang-switch').addEventListener('click', (event) => {
-  const button = event.target.closest('[data-lang]');
-  if (!button || button.dataset.lang === route.lang) return;
-  // Курс другого языка с тем же уровнем может не существовать — открываем список курсов.
-  const sub = route.section === 'courses' ? '' : route.sub === 'session' ? 'today' : route.sub;
-  location.hash = href(button.dataset.lang, route.section, sub);
-});
+async function start() {
+  // Сначала учётная запись: если пользователь вошёл, его прогресс загружается на устройство
+  // до того, как разделы его прочитают.
+  let ui = null;
+  // Ссылки из писем (подтверждение email, смена пароля) приходят с токеном после # —
+  // Supabase забирает его, а адрес раздела потом выставляется заново.
+  const fromEmail = /access_token=|error_description=/.test(location.hash);
+  const recovery = /type=recovery/.test(location.hash);
+  if (accountConfigured()) {
+    $('words-status').textContent = 'Загрузка прогресса…';
+    await initAccount({ timeout: fromEmail ? 10000 : 4000 });
+    $('words-status').textContent = '';
+  }
+  if (fromEmail) history.replaceState(null, '', `${location.pathname}${location.search}`);
+  ui = initAccountUi();
+  if (recovery) ui.openNewPassword();
 
-window.addEventListener('hashchange', apply);
+  const settings = loadSettings();
+  route.lang = LANGUAGES[settings.lang] ? settings.lang : 'en';
+  dictionary = createDictionary($('dict-section'), { onLearn: () => words.refresh() });
+  words = createWords($('words-section'), { navigate: (sub) => go('words', sub) });
+  courses = createCourses($('courses-section'), { navigate: (id) => go('courses', id) });
 
-initSpeech((found) => {
-  const note = $('voice-note');
-  note.hidden = found;
-  note.textContent = found
-    ? ''
-    : `В системе не найден голос для языка «${LANGUAGES[route.lang].label.toLowerCase()}» — слова прочитает голос по умолчанию. Голос можно установить в настройках речи системы.`;
-});
+  document.querySelector('.lang-switch').addEventListener('click', (event) => {
+    const button = event.target.closest('[data-lang]');
+    if (!button || button.dataset.lang === route.lang) return;
+    // Курс другого языка с тем же уровнем может не существовать — открываем список курсов.
+    const sub = route.section === 'courses' ? '' : route.sub === 'session' ? 'today' : route.sub;
+    location.hash = href(button.dataset.lang, route.section, sub);
+  });
+  window.addEventListener('hashchange', apply);
 
-if (!location.hash) history.replaceState(null, '', `${location.pathname}${location.search}${href(route.lang, 'words')}`);
-apply();
+  initSpeech((found) => {
+    const note = $('voice-note');
+    note.hidden = found;
+    note.textContent = found
+      ? ''
+      : `В системе не найден голос для языка «${LANGUAGES[route.lang].label.toLowerCase()}» — слова прочитает голос по умолчанию. Голос можно установить в настройках речи системы.`;
+  });
+
+  if (!location.hash) history.replaceState(null, '', `${location.pathname}${location.search}${href(route.lang, 'words')}`);
+  apply();
+}
+
+start();

@@ -399,3 +399,37 @@ mark { background: none; color: var(--accent); font-weight: 600; }
   background: var(--surface);
 }
 #dict-status { margin-top: 10px; }
+
+/* ===== Учётная запись ===== */
+.header-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.account-button {
+  padding: 6px 14px;
+  border-radius: 999px;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.account-dialog {
+  width: min(420px, calc(100vw - 32px));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  padding: 18px 20px;
+}
+.account-dialog::backdrop { background: rgba(0, 0, 0, .45); }
+.account-head { display: flex; align-items: center; justify-content: space-between; }
+.account-head h2 { margin: 0; font-size: 1.25rem; }
+#account-form { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
+#account-form label { display: flex; flex-direction: column; gap: 4px; color: var(--muted); font-size: .9rem; }
+#account-form input {
+  font: inherit;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--text);
+}
+.account-links { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; margin: 14px 0 0; }
+#account-status:empty { display: none; }
