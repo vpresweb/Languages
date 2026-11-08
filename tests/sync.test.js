@@ -9,7 +9,7 @@ function storage(entries) {
 }
 
 test('синхронизируется прогресс программ, а не служебные ключи', () => {
-  for (const key of ['wordmem.v1.progress.en', 'wordmem.v1.settings', 'englishA1.week', 'enB2:tab', 'pfa2:week', 'dictionary.quiz.settings', 'dicionario.cards.v2']) {
+  for (const key of ['wordmem.v1.progress.en', 'wordmem.v1.settings', 'englishA1.week', 'enB2:tab', 'pfa2:week', 'pfa1:answers','dictionary.quiz.settings', 'dicionario.cards.v2']) {
     assert.ok(isSynced(key), key);
   }
   for (const key of ['sb-abc-auth-token', 'sync.meta', 'sync.backup', 'hub-link.hidden', 'other']) {

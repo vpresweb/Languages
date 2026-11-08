@@ -14,6 +14,7 @@ export const SYNC_PREFIXES = [
   'enA2:',
   'enB1:',
   'enB2:',
+  'pfa1:',
   'pfa2:',
   'languages.', // последнее состояние: раздел, поиск в словаре, незаконченное занятие (js/state.js)
 ];
