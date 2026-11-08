@@ -8,6 +8,7 @@ import { createWords } from './words/view.js';
 import { createCourses } from './courses.js';
 import { initAccount, accountConfigured } from './account.js';
 import { initAccountUi } from './account-ui.js';
+import { loadRoute, saveRoute } from './state.js';
 
 const $ = (id) => document.getElementById(id);
 const SECTIONS = ['dict', 'words', 'courses'];
@@ -47,6 +48,7 @@ async function apply() {
   const langChanged = next.lang !== route.lang;
   const sectionChanged = next.section !== route.section;
   route = next;
+  saveRoute(route);
   if (langChanged || sectionChanged) stopSpeech();
   if (langChanged) saveSettings({ ...loadSettings(), lang: route.lang });
   setSpeechLang(route.lang);
@@ -109,7 +111,14 @@ async function start() {
       : `В системе не найден голос для языка «${LANGUAGES[route.lang].label.toLowerCase()}» — слова прочитает голос по умолчанию. Голос можно установить в настройках речи системы.`;
   });
 
-  if (!location.hash) history.replaceState(null, '', `${location.pathname}${location.search}${href(route.lang, 'words')}`);
+  // Без адреса раздела — открыть то место, где пользователь был в прошлый раз (на любом устройстве).
+  if (!location.hash) {
+    const last = loadRoute();
+    const start = last && LANGUAGES[last.lang] && SECTIONS.includes(last.section)
+      ? href(last.lang, last.section, last.sub)
+      : href(route.lang, 'words');
+    history.replaceState(null, '', `${location.pathname}${location.search}${start}`);
+  }
   apply();
 }
 

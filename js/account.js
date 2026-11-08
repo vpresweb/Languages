@@ -7,7 +7,7 @@
 //   убирается с устройства, чтобы следующий пользователь его не видел;
 // - без интернета приложение работает как обычно, изменения уйдут при следующей отправке.
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
-import { snapshot, dirty, fingerprint, planLogin, isSynced } from './sync.js';
+import { snapshot, dirty, fingerprint, planLogin, isSynced, newerOnServer } from './sync.js';
 
 const SUPABASE_JS = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm';
 const TABLE = 'user_data';
@@ -104,13 +104,20 @@ async function adopt(newUser) {
   user = newUser;
 
   if (plan === 'merge') {
-    writeMeta({ ...meta, user: newUser.id });
-    await push(); // сначала изменения устройства — они новее
+    // Последнее состояние с другого устройства новее — взять его, а не затирать своим.
+    const newer = newerOnServer(local, server);
+    writeLocal(newer);
+    const pushedNewer = Object.fromEntries(Object.entries(newer).map(([k, v]) => [k, fingerprint(v)]));
+    writeMeta({ ...meta, user: newUser.id, pushed: { ...meta.pushed, ...pushedNewer } });
+    // Изменения устройства с прошлой отправки новее сервера: отправить и не затирать
+    // их снимком сервера, сделанным до отправки.
+    const changed = dirty(snapshot(localStorage), readMeta().pushed).upsert;
+    await push();
     const after = readMeta();
     const { upsert } = dirty(snapshot(localStorage), after.pushed);
     const pushed = { ...after.pushed };
     for (const [key, value] of Object.entries(server)) {
-      if (key in upsert) continue; // не затираем то, что не успело уйти
+      if (key in changed || key in upsert) continue; // не затираем то, что новее или не успело уйти
       localStorage.setItem(key, value);
       pushed[key] = fingerprint(value);
     }

@@ -4,6 +4,7 @@
 import { compactEntry } from './words/data.js';
 import { loadProgress, enqueue } from './words/storage.js';
 import { escapeHtml } from './words/data.js';
+import { loadDictState, saveDictState } from './state.js';
 
 const modules = { en: () => import('../dict/en/index.js'), pt: () => import('../dict/pt/index.js') };
 
@@ -64,14 +65,14 @@ export function createDictionary(root, { onLearn }) {
     } else {
       status.textContent = `Найдено: ${found.length}`;
     }
+    saveDictState(lang, { q: query.trim(), mode: currentMode() });
     const url = new URL(location.href);
     if (query.trim()) url.searchParams.set('q', query.trim());
     else url.searchParams.delete('q');
     history.replaceState(null, '', url);
   }
 
-  function renderModes() {
-    const checked = currentMode();
+  function renderModes(checked = currentMode()) {
     modeBox.innerHTML = mod.MODES
       .map(([value, label], i) => `<label><input type="radio" name="mode" value="${value}"
         ${value === checked || (i === 0 && !mod.MODES.some(([v]) => v === checked)) ? 'checked' : ''}> ${label}</label>`)
@@ -110,7 +111,11 @@ export function createDictionary(root, { onLearn }) {
     input.lang = code;
     $('quiz-title').textContent = mod.QUIZ_TITLE;
     quizReady = false;
-    renderModes();
+    // Последний поиск на этом языке; слово из ссылки (?q=) при первом открытии — важнее.
+    const last = loadDictState(code);
+    if (initial) initial = null;
+    else input.value = typeof last?.q === 'string' ? last.q : '';
+    renderModes(typeof last?.mode === 'string' ? last.mode : undefined);
     update();
     show(current);
   }
@@ -132,7 +137,7 @@ export function createDictionary(root, { onLearn }) {
     if (current === 'search' && mod) update();
   }
 
-  const initial = new URLSearchParams(location.search).get('q');
+  let initial = new URLSearchParams(location.search).get('q');
   if (initial) input.value = initial;
 
   input.addEventListener('input', update);

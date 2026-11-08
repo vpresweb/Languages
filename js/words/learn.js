@@ -1,7 +1,7 @@
 // Занятие: сначала повторения на сегодня, затем знакомство с новыми словами (быстрый поток)
 // и карточки «вспомни → проверь → оцени». Оценка решает, когда слово вернётся.
 import { newCard, review, previewIntervals, formatInterval, isLearning, GRADES } from './srs.js';
-import { wordId, dueWords, freshWords, pickNext, dayKey, endOfDay, markDay } from './session.js';
+import { wordId, dueWords, freshWords, pickNext, dayKey, endOfDay, markDay, packSession, unpackSession } from './session.js';
 import { entryMeta, escapeHtml } from './data.js';
 import { speak, stopSpeech } from '../speech.js';
 
@@ -27,7 +27,8 @@ export function nextDueText(progress, now) {
   return `Следующее повторение — ${new Date(next).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })}.`;
 }
 
-// ctx: { get() → { words, progress, settings }, save(), onExit() }
+// ctx: { get() → { words, progress, settings }, save(), onExit(),
+//        loadState(), saveState(data), clearState() — незаконченное занятие }
 export function createSession(root, ctx) {
   const $ = (id) => root.querySelector(`#${id}`);
   const left = $('session-left');
@@ -79,6 +80,39 @@ export function createSession(root, ctx) {
     next();
   }
 
+  // Сохранить, где остановились: после перезагрузки или на другом устройстве занятие продолжится.
+  function persist() {
+    if (!active) return;
+    ctx.saveState(packSession({ queue, waiting, fresh, introDone, reviewed, current }, Date.now()));
+  }
+
+  // Что осталось от сохранённого сегодняшнего занятия (null — нечего продолжать).
+  function saved() {
+    const { words, progress } = ctx.get();
+    return unpackSession(ctx.loadState(), words, progress, Date.now());
+  }
+
+  // Сколько карточек осталось в незаконченном занятии (0 — его нет).
+  function pending() {
+    const s = saved();
+    return s ? s.queue.length + s.waiting.length : 0;
+  }
+
+  // Продолжить незаконченное занятие. false — продолжать нечего.
+  function resume() {
+    const s = saved();
+    if (!s) {
+      ctx.clearState();
+      return false;
+    }
+    ({ queue, waiting, introDone, reviewed } = s);
+    fresh = new Set(s.fresh);
+    current = null;
+    active = true;
+    next();
+    return true;
+  }
+
   function stop() {
     active = false;
     clearTimeout(introState.timer);
@@ -100,6 +134,7 @@ export function createSession(root, ctx) {
     else waiting = waiting.filter((w) => w.entry !== pick.entry);
     current = pick.entry;
     renderCard();
+    persist();
   }
 
   function renderCard() {
@@ -157,6 +192,7 @@ export function createSession(root, ctx) {
     introPause.textContent = 'Пауза';
     show('intro');
     left.textContent = `Новых слов: ${list.length}`;
+    persist();
     introStep();
   }
 
@@ -202,6 +238,7 @@ export function createSession(root, ctx) {
   function finish() {
     active = false;
     current = null;
+    ctx.clearState();
     left.textContent = '';
     const { progress } = ctx.get();
     const now = Date.now();
@@ -248,5 +285,5 @@ export function createSession(root, ctx) {
     }
   });
 
-  return { start, stop, isActive: () => active };
+  return { start, resume, pending, stop, isActive: () => active };
 }

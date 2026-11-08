@@ -15,9 +15,31 @@ export const SYNC_PREFIXES = [
   'enB1:',
   'enB2:',
   'pfa2:',
+  'languages.', // последнее состояние: раздел, поиск в словаре, незаконченное занятие (js/state.js)
 ];
 
 export const isSynced = (key) => SYNC_PREFIXES.some((prefix) => key.startsWith(prefix));
+
+// Ключи «последнего состояния»: в значении есть отметка времени at, и при входе
+// побеждает более свежее значение — устройства или учётной записи.
+export const isLatestWins = (key) => key.startsWith('languages.');
+
+function stampOf(text) {
+  try {
+    return Number(JSON.parse(text)?.at) || 0;
+  } catch {
+    return 0;
+  }
+}
+
+// Значения учётной записи, которые свежее, чем на устройстве: { ключ: строка }.
+export function newerOnServer(local, server) {
+  const out = {};
+  for (const [key, value] of Object.entries(server)) {
+    if (isLatestWins(key) && key in local && stampOf(value) > stampOf(local[key])) out[key] = value;
+  }
+  return out;
+}
 
 // Снимок синхронизируемых ключей: { ключ: строка }.
 export function snapshot(storage) {

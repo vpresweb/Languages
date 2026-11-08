@@ -5,6 +5,7 @@ import { loadProgress, saveProgress, loadSettings, saveSettings, validProgress, 
 import { createSession, nextDueText } from './learn.js';
 import { createStream } from './stream.js';
 import { createFlash } from './flash.js';
+import { loadSessionState, saveSessionState, clearSessionState } from '../state.js';
 
 const SUBVIEWS = ['today', 'session', 'stream', 'flash', 'settings'];
 
@@ -23,7 +24,14 @@ export function createWords(root, { navigate }) {
   const wordsFor = (kind) => wordsForSource(kind, state.words, state.progress, state.settings, Date.now());
   const rebuild = () => { state.words = mergeQueue(state.core, state.progress.queue); };
 
-  const session = createSession($('session-view'), { get: () => state, save, onExit: () => navigate('today') });
+  const session = createSession($('session-view'), {
+    get: () => state,
+    save,
+    onExit: () => navigate('today'),
+    loadState: () => loadSessionState(state.lang),
+    saveState: (data) => saveSessionState(state.lang, data),
+    clearState: () => clearSessionState(state.lang),
+  });
   const stream = createStream($('stream-view'), {
     wordsFor,
     lang: () => state.lang,
@@ -44,6 +52,8 @@ export function createWords(root, { navigate }) {
     if (!SUBVIEWS.includes(name)) name = 'today';
     // Открытое занятие не прерываем, если адрес не менялся (например, вернулись на вкладку).
     if (name === 'today' && current === 'session' && session.isActive()) name = 'session';
+    // Адрес занятия после перезагрузки: продолжить сохранённое, а если нечего — на «Сегодня».
+    if (name === 'session' && state.lang && !session.isActive() && !session.resume()) name = 'today';
     current = name;
     if (name !== 'session') session.stop();
     if (name !== 'stream') stream.stop();
@@ -90,9 +100,10 @@ export function createWords(root, { navigate }) {
       : 'Чтобы учить конкретное слово, найдите его в словаре и нажмите «Учить».';
 
     const start = $('start');
-    const work = s.due + fresh;
+    const left = session.pending();
+    const work = left || s.due + fresh;
     start.disabled = !work;
-    start.textContent = work ? `Начать занятие · ${work}` : 'Начать занятие';
+    start.textContent = left ? `Продолжить занятие · ${left}` : work ? `Начать занятие · ${work}` : 'Начать занятие';
     $('start-hint').textContent = work ? '' : `На сегодня всё. ${nextDueText(state.progress, now)}`;
 
     const days = forecast(state.progress, now);
@@ -104,8 +115,10 @@ export function createWords(root, { navigate }) {
   }
 
   $('start').addEventListener('click', () => {
+    if (!session.resume()) session.start();
     show('session');
-    session.start();
+    // Адрес занятия — чтобы после перезагрузки оно открылось само.
+    navigate('session');
   });
 
   // --- Настройки -------------------------------------------------------------
