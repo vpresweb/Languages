@@ -1,0 +1,14 @@
+{
+    "name":  "languages",
+    "private":  true,
+    "description":  "Английский и португальский: словари, запоминание слов, курсы — в одном приложении",
+    "type":  "module",
+    "license":  "MIT",
+    "scripts":  {
+                    "test":  "node --test",
+                    "build-data":  "node scripts/build-data.mjs"
+                },
+    "engines":  {
+                    "node":  "\u003e=20"
+                }
+}
