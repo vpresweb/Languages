@@ -1,6 +1,8 @@
 // Занятие: сначала повторения на сегодня, затем знакомство с новыми словами (быстрый поток)
-// и карточки «вспомни → проверь → оцени». Оценка решает, когда слово вернётся.
+// и карточки. Проверка — выбором из 4 вариантов по уровням (levels.js) или, по настройке,
+// самооценкой «вспомни → проверь → оцени». Ответ решает, когда слово вернётся.
 import { newCard, review, previewIntervals, formatInterval, isLearning, GRADES } from './srs.js';
+import { LEVELS, MAX_LEVEL, PROMOTE_AFTER, levelOf, streakOf, applyAnswer, gradeFor, pickOptions } from './levels.js';
 import { wordId, dueWords, freshWords, pickNext, dayKey, endOfDay, markDay, packSession, unpackSession } from './session.js';
 import { entryMeta, escapeHtml } from './data.js';
 import { speak, stopSpeech } from '../speech.js';
@@ -42,6 +44,21 @@ export function createSession(root, ctx) {
   const revealButton = $('reveal');
   const grades = $('grades');
   const done = $('session-done');
+  const levelLine = $('level-line');
+  const choices = $('choices');
+  const recall = $('recall');
+  const note = $('answer-note');
+  const nextButton = $('next-card');
+  const keysHint = $('keys-hint');
+
+  // Проверка выбором: уровень текущего слова, варианты, время показа и ответа.
+  let level = 1;
+  let options = [];
+  let answered = false;
+  let shownAt = 0;
+  let revealedAt = 0;
+  let advanceTimer = null;
+  const choiceMode = () => ctx.get().settings.check !== 'self';
 
   let queue = [];
   let waiting = [];
@@ -116,10 +133,12 @@ export function createSession(root, ctx) {
   function stop() {
     active = false;
     clearTimeout(introState.timer);
+    clearTimeout(advanceTimer);
     stopSpeech();
   }
 
   function next() {
+    clearTimeout(advanceTimer);
     current = null;
     const pick = pickNext(queue, waiting, Date.now());
     if (!pick) {
@@ -137,25 +156,144 @@ export function createSession(root, ctx) {
     persist();
   }
 
+  // «Уровень 2 из 3 · Обратный выбор ●●○» — точки: верные ответы подряд на этом уровне.
+  function levelHtml(lvl, streak) {
+    const dots = lvl < MAX_LEVEL
+      ? ` <span class="dots" title="Верных ответов подряд: ${streak} из ${PROMOTE_AFTER}">${'●'.repeat(streak)}${'○'.repeat(PROMOTE_AFTER - streak)}</span>`
+      : '';
+    return `Уровень ${lvl} из ${MAX_LEVEL} · ${LEVELS[lvl].name}${dots}`;
+  }
+
   function renderCard() {
-    const { settings } = ctx.get();
-    reverse = settings.direction === 'reverse' || (settings.direction === 'mixed' && Math.random() < 0.5);
+    const { settings, progress, words } = ctx.get();
+    clearTimeout(advanceTimer);
     revealed = false;
-    const meta = `<span class="meta">${escapeHtml(entryMeta(current))}</span>`;
-    const translation = `<span class="translation">${escapeHtml(translationText(current))}</span>`;
-    front.innerHTML = reverse ? `${translation}${meta}` : `${wordHtml(current)}${meta}`;
-    back.innerHTML = `${reverse ? wordHtml(current) : translation}${exampleHtml(current)}`;
+    answered = false;
+    shownAt = Date.now();
     back.hidden = true;
     grades.hidden = true;
-    revealButton.hidden = false;
+    choices.hidden = true;
+    recall.hidden = true;
+    nextButton.hidden = true;
+    note.textContent = '';
+    note.className = 'answer-note';
+    const meta = `<span class="meta">${escapeHtml(entryMeta(current))}</span>`;
+    const translation = `<span class="translation">${escapeHtml(translationText(current))}</span>`;
+
+    if (!choiceMode()) {
+      reverse = settings.direction === 'reverse' || (settings.direction === 'mixed' && Math.random() < 0.5);
+      levelLine.textContent = '';
+      front.innerHTML = reverse ? `${translation}${meta}` : `${wordHtml(current)}${meta}`;
+      back.innerHTML = `${reverse ? wordHtml(current) : translation}${exampleHtml(current)}`;
+      revealButton.hidden = false;
+      keysHint.textContent = 'Клавиши: пробел — ответ, 1–4 — оценка';
+      show('review');
+      updateLeft();
+      revealButton.focus({ preventScroll: true });
+      if (!reverse && settings.autospeak) speak(current.word, front.querySelector('[data-word]'));
+      return;
+    }
+
+    const card = progress.cards[wordId(current)];
+    level = levelOf(card);
+    reverse = level > 1;
+    levelLine.innerHTML = `${levelHtml(level, streakOf(card))} <span class="task">— ${LEVELS[level].task}</span>`;
+    if (level === 1) {
+      front.innerHTML = `${wordHtml(current)}${meta}`;
+      back.innerHTML = exampleHtml(current);
+    } else {
+      front.innerHTML = `${translation}${meta}`;
+      back.innerHTML = `${wordHtml(current)}${exampleHtml(current)}`;
+    }
+    if (level < 3) {
+      options = pickOptions(current, words);
+      choices.innerHTML = options
+        .map((e, i) => `<button type="button" data-choice="${i}"${level === 2 ? ' lang="' + escapeHtml(ctx.get().lang ?? '') + '"' : ''}>${escapeHtml(level === 1 ? e.translations.slice(0, 3).join(', ') : e.word)}</button>`)
+        .join('');
+      choices.hidden = false;
+      revealButton.hidden = true;
+      keysHint.textContent = 'Клавиши: 1–4 — вариант, Enter — дальше';
+    } else {
+      revealButton.hidden = false;
+      keysHint.textContent = 'Клавиши: пробел — ответ, 1 — не вспомнил, 2 — вспомнил';
+    }
     show('review');
     updateLeft();
-    revealButton.focus({ preventScroll: true });
-    if (!reverse && settings.autospeak) speak(current.word, front.querySelector('[data-word]'));
+    if (level === 3) revealButton.focus({ preventScroll: true });
+    else document.activeElement?.blur?.();
+    if (level === 1 && settings.autospeak) speak(current.word, front.querySelector('[data-word]'));
+  }
+
+  // Ответ выбором (уровни 1 и 2).
+  function choose(index) {
+    if (!current || answered || level >= 3 || !options[index]) return;
+    const correct = wordId(options[index]) === wordId(current);
+    choices.querySelectorAll('[data-choice]').forEach((button, j) => {
+      button.disabled = true;
+      if (wordId(options[j]) === wordId(current)) button.classList.add('right');
+      else if (j === index) button.classList.add('wrong');
+    });
+    back.hidden = !back.innerHTML;
+    if (level === 2 && ctx.get().settings.autospeak) speak(current.word, back.querySelector('[data-word]'));
+    answer(correct, Date.now() - shownAt);
+  }
+
+  // Ответ на 3-м уровне: «Вспомнил» / «Не вспомнил» после открытого ответа.
+  function recallAnswer(remembered) {
+    if (!current || answered || level !== 3 || !revealed) return;
+    answer(remembered, revealedAt - shownAt);
+  }
+
+  // Записать ответ: уровень и серия слова, интервал по алгоритму повторения.
+  function answer(correct, ms) {
+    answered = true;
+    const now = Date.now();
+    const { progress } = ctx.get();
+    const entry = current;
+    const id = wordId(entry);
+    const card = progress.cards[id] ?? { ...newCard(now), added: dayKey(now) };
+    const result = applyAnswer(card, correct);
+    const updated = { ...review(card, gradeFor(correct, ms), now), level: result.level, streak: result.streak };
+    progress.cards[id] = updated;
+    markDay(progress, now);
+    ctx.save();
+    reviewed += 1;
+    if (isLearning(updated) && updated.due <= endOfDay(now)) waiting.push({ entry, due: updated.due });
+    // Слово отвечено: при перезагрузке на этой странице оно не должно показаться снова.
+    current = null;
+    persist();
+    current = entry;
+
+    levelLine.innerHTML = levelHtml(result.level, result.streak);
+    recall.hidden = true;
+    let text = correct ? '✓ Верно' : '✗ Неверно';
+    if (!correct && level < 3) text += ' — правильный ответ выделен';
+    if (result.promoted) text += ` · Новый уровень: ${LEVELS[result.level].name.toLowerCase()}!`;
+    if (result.demoted) text += ` · Слово вернулось на уровень ${result.level}`;
+    note.textContent = text;
+    note.className = `answer-note ${correct ? 'ok' : 'no'}`;
+    if (level === 3 && correct && !result.promoted) {
+      next();
+      return;
+    }
+    nextButton.hidden = false;
+    // Верный ответ — дальше само через секунду; неверный — дать рассмотреть.
+    if (correct) advanceTimer = setTimeout(() => { if (active && answered) next(); }, result.promoted ? 2000 : 1100);
   }
 
   function reveal() {
     if (!current || revealed) return;
+    if (choiceMode()) {
+      if (level !== 3 || answered) return;
+      revealed = true;
+      revealedAt = Date.now();
+      back.hidden = false;
+      revealButton.hidden = true;
+      recall.hidden = false;
+      revealButton.blur();
+      if (ctx.get().settings.autospeak) speak(current.word, back.querySelector('[data-word]'));
+      return;
+    }
     revealed = true;
     back.hidden = false;
     revealButton.hidden = true;
@@ -171,7 +309,7 @@ export function createSession(root, ctx) {
   }
 
   function grade(value) {
-    if (!current || !revealed) return;
+    if (!current || !revealed || choiceMode()) return;
     const now = Date.now();
     const { progress } = ctx.get();
     const id = wordId(current);
@@ -255,6 +393,17 @@ export function createSession(root, ctx) {
     const button = event.target.closest('[data-grade]');
     if (button) grade(Number(button.dataset.grade));
   });
+  choices.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-choice]');
+    if (button) choose(Number(button.dataset.choice));
+  });
+  recall.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-recall]');
+    if (button) recallAnswer(button.dataset.recall === '1');
+  });
+  nextButton.addEventListener('click', () => {
+    if (answered) next();
+  });
   // Нажатие на карточку тоже открывает ответ (но не на слово — оно озвучивается).
   $('card').addEventListener('click', (event) => {
     if (!event.target.closest('.speak')) reveal();
@@ -276,6 +425,23 @@ export function createSession(root, ctx) {
       return;
     }
     if (reviewBox.hidden) return;
+    if (choiceMode()) {
+      const key = event.key;
+      if (answered && (key === 'Enter' || key === ' ')) {
+        event.preventDefault();
+        next();
+      } else if (!answered && level < 3 && ['1', '2', '3', '4'].includes(key)) {
+        event.preventDefault();
+        choose(Number(key) - 1);
+      } else if (!answered && level === 3 && !revealed && (key === ' ' || key === 'Enter')) {
+        event.preventDefault();
+        reveal();
+      } else if (!answered && level === 3 && revealed && (key === '1' || key === '2')) {
+        event.preventDefault();
+        recallAnswer(key === '2');
+      }
+      return;
+    }
     if ((event.key === ' ' || event.key === 'Enter') && !revealed) {
       event.preventDefault();
       reveal();
