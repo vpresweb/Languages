@@ -23,7 +23,15 @@ test('занятие сохраняется ключами слов, показ�
     fresh: [id(say)],
     introDone: true,
     reviewed: 3,
+    halves: {},
   });
+});
+
+test('самооценка: оценка прямой карточки сохраняется, пока слово ждёт обратную', () => {
+  const packed = packSession({ queue: [doo, say], waiting: [], fresh: new Set([id(say)]), introDone: true, reviewed: 0, current: null, halves: new Map([[id(say), 2]]) }, NOW);
+  assert.deepEqual(packed.halves, { [id(say)]: 2 });
+  const r = unpackSession({ ...packed, halves: { ...packed.halves, [id(go)]: 3, [id(doo)]: 'x' } }, words, progressWith({}), NOW);
+  assert.deepEqual(r.halves, [[id(say), 2]]);
 });
 
 test('восстановление: сегодняшнее занятие продолжается с того же места', () => {
