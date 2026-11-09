@@ -134,6 +134,7 @@ export function createWords(root, { navigate }) {
   function renderSettings() {
     $('set-new').value = String(state.settings.newPerDay);
     $('set-check').value = state.settings.check;
+    $('set-order').value = state.settings.cardOrder ?? 'random';
     $('set-intro').value = String(state.settings.introSeconds);
     $('set-autospeak').checked = state.settings.autospeak;
     $('backup-status').textContent = '';
@@ -142,6 +143,7 @@ export function createWords(root, { navigate }) {
 
   $('set-new').addEventListener('change', (e) => updateSettings({ newPerDay: Number(e.target.value) }));
   $('set-check').addEventListener('change', (e) => updateSettings({ check: e.target.value }));
+  $('set-order').addEventListener('change', (e) => updateSettings({ cardOrder: e.target.value }));
   $('set-intro').addEventListener('change', (e) => updateSettings({ introSeconds: Number(e.target.value) }));
   $('set-autospeak').addEventListener('change', (e) => updateSettings({ autospeak: e.target.checked }));
 
