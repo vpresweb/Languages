@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {
   wordId, dayKey, freshWords, dueWords, pickNext, streak, summary, forecast, markDay, wordsForSource, sample, LEARN_AHEAD,
 } from '../js/words/session.js';
+import { newCard, review, GOOD, EASY, MINUTE, DAY } from '../js/words/srs.js';
 
 test('случайная выборка: без повторов, не больше нужного, из всего списка', () => {
   const list = Array.from({ length: 100 }, (_, i) => i);
@@ -13,7 +14,6 @@ test('случайная выборка: без повторов, не боль�
   assert.equal(sample([1, 2], 30).length, 2);
   assert.notDeepEqual(sample(list, 30, () => 0.99), sample(list, 30, () => 0));
 });
-import { newCard, review, GOOD, EASY, MINUTE, DAY } from '../js/words/srs.js';
 
 const NOW = new Date(2026, 10, 8, 12, 0).getTime(); // местное время, полдень
 const words = ['be', 'have', 'do', 'say', 'go', 'get', 'make'].map((word) => ({ word, pos: 'verb', translations: ['x'] }));
@@ -48,6 +48,18 @@ test('следующая карточка: сначала готовые к по
   const ahead = pickNext([], [{ entry: c, due: NOW + 5 * MINUTE }, { entry: b, due: NOW + MINUTE }], NOW);
   assert.equal(ahead.entry, b);
   assert.equal(pickNext([], [{ entry: c, due: NOW + LEARN_AHEAD + MINUTE }], NOW), null);
+});
+
+test('только что показанное слово не идёт второй раз подряд, если есть другие', () => {
+  const [a, b, c] = ['be', 'have', 'do'].map((word) => ({ word, pos: 'verb', translations: ['x'] }));
+  // b с ошибкой вернётся через минуту, c — через 10: всё равно следующим будет c, а не снова b.
+  const waiting = [{ entry: b, due: NOW + MINUTE }, { entry: c, due: NOW + 10 * MINUTE }];
+  assert.equal(pickNext([], waiting, NOW, b).entry, c);
+  assert.equal(pickNext([b, a], [], NOW, b).entry, a);
+  assert.equal(pickNext([], [{ entry: b, due: NOW - 1 }, { entry: a, due: NOW - 1 }], NOW, b).entry, a);
+  // других нет — то же слово
+  assert.equal(pickNext([b], [], NOW, b).entry, b);
+  assert.equal(pickNext([], [{ entry: b, due: NOW + MINUTE }], NOW, b).entry, b);
 });
 
 test('серия дней: считается от сегодня или вчера', () => {
