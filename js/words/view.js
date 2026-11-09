@@ -2,7 +2,7 @@
 import { LANGUAGES, loadWords, mergeQueue } from './data.js';
 import { summary, forecast, freshWords, wordsForSource, SOURCES, dayKey } from './session.js';
 import { loadProgress, saveProgress, loadSettings, saveSettings, validProgress, emptyProgress } from './storage.js';
-import { createSession, nextDueText } from './learn.js';
+import { createSession, nextDueText, startedToday } from './learn.js';
 import { createStream } from './stream.js';
 import { createFlash } from './flash.js';
 import { loadSessionState, saveSessionState, clearSessionState } from '../state.js';
@@ -113,6 +113,10 @@ export function createWords(root, { navigate }) {
     start.disabled = !work;
     start.textContent = left ? `Продолжить занятие · ${left}` : work ? `Начать занятие · ${work}` : 'Начать занятие';
     $('start-hint').textContent = work ? '' : `На сегодня всё. ${nextDueText(state.progress, now)}`;
+    // Пройти обучение снова — когда слова сегодня уже начаты (незаконченное занятие заменится новым).
+    const today = startedToday(state.words, state.progress, now).length;
+    $('restart').hidden = !today;
+    $('restart').textContent = `Пройти обучение снова · ${today}`;
 
     const days = forecast(state.progress, now);
     const max = Math.max(1, ...days);
@@ -126,6 +130,12 @@ export function createWords(root, { navigate }) {
     if (!session.resume()) session.start();
     show('session');
     // Адрес занятия — чтобы после перезагрузки оно открылось само.
+    navigate('session');
+  });
+
+  $('restart').addEventListener('click', () => {
+    if (!session.restartToday()) return;
+    show('session');
     navigate('session');
   });
 
