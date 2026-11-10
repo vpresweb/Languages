@@ -1,5 +1,6 @@
 // Раздел «Слова»: Сегодня, занятие, Поток, 25-й кадр, Настройки (бывшее приложение Word_Memory).
 import { LANGUAGES, loadWords, mergeQueue } from './data.js';
+import { loadMnemonics } from '../mnemonics.js';
 import { summary, forecast, freshWords, wordsForSource, SOURCES, dayKey } from './session.js';
 import { loadProgress, saveProgress, loadSettings, saveSettings, validProgress, emptyProgress } from './storage.js';
 import { createSession, nextDueText, startedToday } from './learn.js';
@@ -23,7 +24,7 @@ export function createWords(root, { navigate }) {
 
   const save = () => saveProgress(state.lang, state.progress);
   const wordsFor = (kind) => wordsForSource(kind, state.words, state.progress, state.settings, Date.now());
-  const rebuild = () => { state.words = mergeQueue(state.core, state.progress.queue); };
+  const rebuild = () => { state.words = mergeQueue(state.core, state.progress.queue, state.mnemonics); };
 
   const session = createSession($('session-view'), {
     get: () => state,
@@ -224,6 +225,7 @@ export function createWords(root, { navigate }) {
     $('words-status').textContent = 'Загрузка слов…';
     try {
       state.core = await loadWords(lang);
+      state.mnemonics = await loadMnemonics(lang);
     } catch (error) {
       $('words-status').textContent = `${error.message}. Обновите страницу.`;
       return;

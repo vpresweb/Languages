@@ -21,12 +21,16 @@ export function compactEntry(entry, example) {
 
 // Список для занятий: сначала слова, добавленные из словаря кнопкой «Учить» (в порядке
 // добавления), затем основные — по частоте. Повторы убираются.
-export function mergeQueue(core, queue = []) {
+export function mergeQueue(core, queue = [], mnemonics = {}) {
   const id = (e) => `${e.word}|${e.pos}`;
   const queued = new Set(queue.map(id));
-  // Слова в очереди сохранены без ассоциации — берём её из основного списка.
+  // Ассоциация для слова из очереди: из полного файла ассоциаций (там и редкие слова словаря),
+  // затем из основного списка, затем сохранённая при добавлении (могла устареть).
   const byId = new Map(core.map((e) => [id(e), e]));
-  const withMnemonic = queue.map((q) => (q.mnemonic || !byId.get(id(q))?.mnemonic ? q : { ...q, mnemonic: byId.get(id(q)).mnemonic }));
+  const withMnemonic = queue.map((q) => {
+    const text = mnemonics[id(q)] || byId.get(id(q))?.mnemonic || q.mnemonic;
+    return text && text !== q.mnemonic ? { ...q, mnemonic: text } : q;
+  });
   return [...withMnemonic, ...core.filter((e) => !queued.has(id(e)))];
 }
 

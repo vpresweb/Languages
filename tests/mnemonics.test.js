@@ -20,6 +20,13 @@ test('ассоциации: слово из очереди «Учить» пол
   assert.equal(compactEntry({ word: 'ler', pos: 'verb', translations: ['читать'], mnemonic: 'М' }).mnemonic, 'М');
 });
 
+test('ассоциации: редкое слово из словаря (нет в основном списке) берёт ассоциацию из файла', () => {
+  const queue = [{ word: 'prendar', pos: 'verb', translations: ['одарять'] }];
+  assert.equal(mergeQueue([], queue, { 'prendar|verb': 'ПРИ-ДАРить' })[0].mnemonic, 'ПРИ-ДАРить');
+  const map = JSON.parse(readFileSync('data/mnemonics-pt.json', 'utf8'));
+  assert.ok(map['prendar|verb']);
+});
+
 for (const lang of ['pt', 'en']) {
   test(`${lang}: ассоциации есть для всех 3000 самых частых слов`, () => {
     const map = JSON.parse(readFileSync(`data/mnemonics-${lang}.json`, 'utf8'));

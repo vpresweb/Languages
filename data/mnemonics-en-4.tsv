@@ -20,7 +20,7 @@ parent	noun	«пэрэнт» — ПАРЕНЬ стал РОДИТЕЛЕМ
 mother	noun	«мазэ» — МАЗЬ — МАМА мажет
 father	noun	«фазэ» — ФАЗА — ОТЕЦ
 mum	noun	«мам» — МАМА
-dad	noun	«дэд» — ДЕДушка? нет — ПАПА
+dad	noun	«дэд» — ДЕД ДЛЯ ВНУКА, ПАПА ДЛЯ СЫНА — ПАПА
 son	noun	«сан» — САНки у СЫНА
 daughter	noun	«дотэ» — ДОТА — ДОЧЬ играет
 brother	noun	«бразэ» — БРАТ
@@ -101,7 +101,7 @@ driver	noun	«драйвэ» — ДРАЙВЕР — ВОДИТЕЛЬ
 taxi driver	noun	«тэкси драйвэ» — ТАКСИСТ
 mechanic	noun	«микэник» — МЕХАНИК
 builder	noun	«билдэ» — БИЛДЕР — СТРОИТЕЛЬ
-plumber	noun	«пламэ» — ПЛАМЕНЬ? нет — САНТЕХНИК (plumbum — свинец труб)
+plumber	noun	«пламэ» — ПЛОМБА В ТРУБЕ (plumbum — свинец) — САНТЕХНИК
 electrician	noun	«илектришн» — ЭЛЕКТРИК
 farmer	noun	«фамэ» — ФЕРМЕР
 cook	noun	«кук» — КОК — ПОВАР
