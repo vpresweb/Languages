@@ -4,8 +4,11 @@
 import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
 
 const lang = process.argv[2] || 'pt';
+// Слово должно быть в списке для изучения или в полном словаре (для редких слов).
 const words = JSON.parse(readFileSync(`data/words-${lang}.json`, 'utf8'));
-const known = new Set(words.map((e) => `${e.word}|${e.pos}`));
+const dictRaw = JSON.parse(readFileSync(`data/dict-${lang}.json`, 'utf8'));
+const dict = Array.isArray(dictRaw) ? dictRaw : (dictRaw.entries ?? dictRaw.words ?? []);
+const known = new Set([...words, ...dict].map((e) => `${e.word}|${e.pos}`));
 const out = {};
 const problems = [];
 
