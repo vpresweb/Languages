@@ -5,6 +5,7 @@ import { compactEntry } from './words/data.js';
 import { loadProgress, enqueue } from './words/storage.js';
 import { escapeHtml } from './words/data.js';
 import { loadDictState, saveDictState } from './state.js';
+import { loadMnemonics, attachMnemonics } from './mnemonics.js';
 
 const modules = { en: () => import('../dict/en/index.js'), pt: () => import('../dict/pt/index.js') };
 
@@ -82,7 +83,8 @@ export function createDictionary(root, { onLearn }) {
   async function load(code) {
     if (cache.has(code)) return cache.get(code);
     const m = await modules[code]();
-    const data = { mod: m, entries: await m.loadDictionary(m.DATA_URL) };
+    const [dict, mn] = await Promise.all([m.loadDictionary(m.DATA_URL), loadMnemonics(code)]);
+    const data = { mod: m, entries: attachMnemonics(dict, mn) };
     cache.set(code, data);
     return data;
   }

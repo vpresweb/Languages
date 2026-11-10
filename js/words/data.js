@@ -1,6 +1,8 @@
 // Наборы слов. Файлы data/words-en.json и data/words-pt.json собираются скриптом
 // scripts/build-data.mjs из основной части словарей (порядок — по частоте).
 
+import { loadMnemonics, attachMnemonics } from '../mnemonics.js';
+
 export const LANGUAGES = {
   en: { name: 'English', label: 'Английский', code: 'en', file: 'data/words-en.json' },
   pt: { name: 'Português', label: 'Португальский', code: 'pt', file: 'data/words-pt.json' },
@@ -13,6 +15,7 @@ export function compactEntry(entry, example) {
   const out = { word: entry.word, pos: entry.pos, translations: entry.translations.slice(0, MAX_TRANSLATIONS) };
   if (entry.gender) out.gender = entry.gender;
   if (example?.text && example.ru) out.example = example;
+  if (entry.mnemonic) out.mnemonic = entry.mnemonic;
   return out;
 }
 
@@ -21,7 +24,10 @@ export function compactEntry(entry, example) {
 export function mergeQueue(core, queue = []) {
   const id = (e) => `${e.word}|${e.pos}`;
   const queued = new Set(queue.map(id));
-  return [...queue, ...core.filter((e) => !queued.has(id(e)))];
+  // Слова в очереди сохранены без ассоциации — берём её из основного списка.
+  const byId = new Map(core.map((e) => [id(e), e]));
+  const withMnemonic = queue.map((q) => (q.mnemonic || !byId.get(id(q))?.mnemonic ? q : { ...q, mnemonic: byId.get(id(q)).mnemonic }));
+  return [...withMnemonic, ...core.filter((e) => !queued.has(id(e)))];
 }
 
 export const POS_NAMES = {
@@ -52,7 +58,7 @@ export async function loadWords(lang) {
   if (cache.has(lang)) return cache.get(lang);
   const response = await fetch(LANGUAGES[lang].file);
   if (!response.ok) throw new Error(`Не удалось загрузить слова: ${response.status}`);
-  const words = await response.json();
+  const words = attachMnemonics(await response.json(), await loadMnemonics(lang));
   cache.set(lang, words);
   return words;
 }

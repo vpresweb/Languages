@@ -47,6 +47,7 @@ export function renderEntry(entry, action = '') {
         ${action}
       </div>
       <p class="entry-translations">${entry.translations.map(escapeHtml).join(', ')}</p>
+      ${entry.mnemonic ? `<p class="mnemonic" title="Ассоциация для запоминания">💡 ${escapeHtml(entry.mnemonic)}</p>` : ''}
       ${examples ? `<ul class="entry-examples">${examples}</ul>` : ''}
       ${entry.conjugated ? renderConjugation(entry.conjugated) : ''}
     </li>`;
