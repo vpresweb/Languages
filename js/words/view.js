@@ -17,6 +17,17 @@ export function createWords(root, { navigate }) {
   const state = { lang: null, core: [], words: [], progress: emptyProgress(), settings: loadSettings() };
   let current = 'today';
 
+  // В настройках — список готовых значений; время со шкалы знакомства (например, 3,5 с)
+  // добавляется в список, чтобы поле не оказалось пустым.
+  function syncSettingsIntro() {
+    const select = $('set-intro');
+    const value = String(state.settings.introSeconds);
+    if (![...select.options].some((o) => o.value === value)) {
+      select.add(new Option(`${value.replace('.', ',')} с на слово`, value));
+    }
+    select.value = value;
+  }
+
   function updateSettings(patch) {
     Object.assign(state.settings, patch);
     saveSettings(state.settings);
@@ -29,6 +40,7 @@ export function createWords(root, { navigate }) {
   const session = createSession($('session-view'), {
     get: () => state,
     save,
+    saveSettings: (patch) => { updateSettings(patch); syncSettingsIntro(); },
     onExit: () => navigate('today'),
     loadState: () => loadSessionState(state.lang),
     saveState: (data) => saveSessionState(state.lang, data),
@@ -146,7 +158,7 @@ export function createWords(root, { navigate }) {
     $('set-new').value = String(state.settings.newPerDay);
     $('set-check').value = state.settings.check;
     $('set-order').value = state.settings.cardOrder ?? 'random';
-    $('set-intro').value = String(state.settings.introSeconds);
+    syncSettingsIntro();
     $('set-autospeak').checked = state.settings.autospeak;
     $('backup-status').textContent = '';
     $('reset').textContent = `Сбросить прогресс: ${LANGUAGES[state.lang].label.toLowerCase()}`;
