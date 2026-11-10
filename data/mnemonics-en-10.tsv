@@ -1,0 +1,340 @@
+she	pron	«шии» — ШИ-ШИ, ШЕПЧЕТ ОНА — ОНА
+it	pron	«ит» — ИТО (это) — ОНО
+we	pron	«уии» — ВИ — МЫ (WE, как «ВЫ»)
+they	pron	«зей» — ЗЕЙ — ОНИ: ЗЕЙ ТАМ
+me	pron	«мии» — МИ — МЕНЯ (ме)
+him	pron	«хим» — ХИМИК — ЕГО
+her	pron	«хёё» — ХЕР-РА — ЕЁ
+us	pron	«ас» — АС — НАС
+them	pron	«зем» — ЗЕМЛЯ ИХ — ИХ
+my	pron	«май» — МАЙ — МОЙ
+your	pron	«йоо» — ЁЖ ТВОЙ — ТВОЙ
+his	pron	«хиз» — ХИЗ — ЕГО
+its	pron	«итс» — ИТС — ЕГО (неодуш.)
+our	pron	«ауэ» — АУ, НАШ! — НАШ
+their	pron	«зэа» — ЗА ИХ — ИХ
+mine	pron	«майн» — МАЙН (шахта) МОЯ — МОЙ
+yours	pron	«йооз» — ЁЖ ТВОЙ — ТВОЙ
+hers	pron	«хёёз» — ХЁРЗ — ЕЁ
+ours	pron	«ауэз» — АУЭЗ — НАШ
+theirs	pron	«зэаз» — ЗА ИХ — ИХ
+myself	pron	«майселф» — МАЙ СЕЛФИ — СЕБЯ (я сам)
+yourself	pron	«йоселф» — ТВОЁ СЕЛФИ — СЕБЯ (ты сам)
+himself	pron	«химселф» — ХИМИК СЕЛФИ — СЕБЯ (он сам)
+herself	pron	«хёселф» — ЕЁ СЕЛФИ — СЕБЯ (она сама)
+itself	pron	«итселф» — ОНО САМО — СЕБЯ
+ourselves	pron	«ауэселвз» — НАШИ СЕЛФИ — СЕБЯ (мы сами)
+themselves	pron	«зэмселвз» — ИХ СЕЛФИ — СЕБЯ (они сами)
+this	pron	«зис» — ЗИС-ЭТОТ — ЭТОТ
+that	pron	«зэт» — ЗЕТ ВОН ТАМ — ТОТ
+these	pron	«зииз» — ЗИИИЗ ЭТИ — ЭТИ
+those	pron	«зоуз» — ЗОЗУЛИ ТЕ — ТЕ
+what	pron	«уот» — ВОТ ЧТО — ЧТО
+who	pron	«хуу» — ХУ-ХУ, КТО? — КТО
+whom	pron	«хуум» — ХУМ КОГО — КОГО
+whose	pron	«хууз» — ХУЗ ЧЕЙ? — ЧЕЙ
+which	pron	«уич» — ВИЧИ-ВЫБИРАЙ — КОТОРЫЙ
+something	pron	«самсин» — САМ СИН (вещь) — ЧТО-ТО
+anything	pron	«энисин» — ЭНИ (любая) ВЕЩЬ — ЧТО-НИБУДЬ
+nothing	pron	«насин» — НАСИНГ: НИ ВЕЩИ — НИЧЕГО
+everything	pron	«эврисин» — ЭВРИ ВЕЩЬ — ВСЁ
+someone	pron	«самуан» — САМ ОДИН — КТО-ТО
+somebody	pron	«самбоди» — САМ БОДИ (тело) — КТО-ТО
+anyone	pron	«эниуан» — ЭНИ ОДИН — КТО-НИБУДЬ
+anybody	pron	«энибоди» — ЭНИ БОДИ — КТО-НИБУДЬ
+no one	pron	«ноу уан» — НОУ ОДИН — НИКТО
+nobody	pron	«ноубоди» — НОУ БОДИ — НИКТО
+everyone	pron	«эвриуан» — КАЖДЫЙ ОДИН — ВСЕ
+everybody	pron	«эврибоди» — ЭВРИБАДИ ДЭНС — ВСЕ
+one	pron	«уан» — ВАНЬКА ОДИН — ОДИН (заменитель)
+each other	pron	«ииич азэ» — КАЖДЫЙ ДРУГОЙ — ДРУГ ДРУГА
+a	det	«э» — Э, КАКОЙ-ТО — НЕОПРЕДЕЛЁННЫЙ АРТИКЛЬ
+an	det	«эн» — ЭН, ПЕРЕД ГЛАСНОЙ — АРТИКЛЬ (an apple)
+the	det	«зэ» — ЗЭ, ТОТ САМЫЙ — ОПРЕДЕЛЁННЫЙ АРТИКЛЬ
+some	det	«сам» — САМ НЕСКОЛЬКО — НЕСКОЛЬКО
+any	det	«эни» — ЭНИ, ЛЮБОЙ — КАКОЙ-НИБУДЬ
+no	det	«ноу» — НОУ — НИКАКОЙ
+every	det	«эври» — ЭВРИКА КАЖДОМУ — КАЖДЫЙ
+each	det	«иич» — ИЧ, КАЖДЫЙ ПО ОТДЕЛЬНОСТИ — КАЖДЫЙ
+all	det	«оол» — ОЛЛ-ИНКЛЮЗИВ — ВСЕ
+both	det	«боус» — БОЦМАН И КОК — ОБА
+either	det	«айзэ» — АЙ, ЗА ЛЮБОГО — ЛЮБОЙ ИЗ ДВУХ
+neither	det	«найзэ» — НАЙ, НИ ТОТ — НИ ОДИН ИЗ ДВУХ
+few	det	«фьюю» — ФЬЮ, МАЛО — МАЛО
+a few	det	«э фьюю» — НЕСКОЛЬКО ФЬЮ — НЕСКОЛЬКО
+a little	det	«э литл» — ЛИЛИПУТСКОЕ — НЕМНОГО
+a lot of	det	«э лот ов» — ЛОТО — МНОГО
+lots of	det	«лотс ов» — ЛОТЫ — МНОГО
+several	det	«севрэл» — СЕВЕР ЛЕСОВ — НЕСКОЛЬКО
+most	det	«моуст» — МОСТ БОЛЬШИНСТВА — БОЛЬШИНСТВО
+enough	det	«инаф» — И НАФИГ БОЛЬШЕ — ДОСТАТОЧНО
+such	det	«сач» — САЧОК ТАКОЙ — ТАКОЙ
+in	prep	«ин» — ИН-ДОМ — В
+on	prep	«он» — ОН НА СТОЛЕ — НА
+at	prep	«эт» — ЭТО У ДВЕРИ — В, У
+to	prep	«туу» — ТУДА — К
+from	prep	«фром» — ФРОМ ОТКУДА — ИЗ, ОТ
+of	prep	«ов» — ОВ — РОДИТЕЛЬНЫЙ ПАДЕЖ (чего-то)
+for	prep	«фоо» — ФОР-ДЛЯ — ДЛЯ
+with	prep	«уиз» — ВИЗИТ С ДРУГОМ — С
+without	prep	«уизаут» — С-АУТ: БЕЗ — БЕЗ
+by	prep	«бай» — БАЙ У ДОРОГИ — У, ПОСРЕДСТВОМ
+about	prep	«эбаут» — ЭБАУТ — О
+under	prep	«андэ» — АНДЕГРАУНД — ПОД
+over	prep	«оувэ» — ОВЕРХЕД — НАД
+above	prep	«эбав» — ВЫШЕ — НАД
+below	prep	«билоу» — БЕЛОУС ВНИЗУ — НИЖЕ
+between	prep	«битуиин» — БИ-ТВИН: ДВА БЛИЗНЕЦА — МЕЖДУ
+among	prep	«эмаг» — А МАГ СРЕДИ НАС — СРЕДИ
+behind	prep	«бихайнд» — БИ ХАЙД (спрятаться) — ПОЗАДИ
+in front of	prep	«ин франт ов» — НА ФРОНТЕ — ПЕРЕД
+next to	prep	«некст ту» — НЕКСТ — РЯДОМ С
+near	prep	«ниэ» — НИЭР — ОКОЛО
+opposite	prep	«опэзит» — ОППОЗИЦИЯ — НАПРОТИВ
+into	prep	«инту» — ИН-ТУ — ВНУТРЬ
+out of	prep	«аут ов» — АУТ — ИЗ
+onto	prep	«онту» — ОН-ТУ — НА (движение)
+through	prep	«срууу» — СКВОЗЬ ТРУБУ — ЧЕРЕЗ
+across	prep	«экрос» — А КРОСС — ЧЕРЕЗ (поперёк)
+along	prep	«элон» — А ЛОНГ — ВДОЛЬ
+around	prep	«эраунд» — РАУНД — ВОКРУГ
+towards	prep	«тэуоодз» — ТУ-ВОРДС — К, НАВСТРЕЧУ
+up	prep	«ап» — АП — ВВЕРХ ПО
+down	prep	«даун» — ДАУН — ВНИЗ ПО
+past	prep	«паст» — ПАСТЬ МИМО — МИМО
+during	prep	«дьюэрин» — ДЮРАЦИЯ — ВО ВРЕМЯ
+until	prep	«антил» — АН-ТИЛЬ — ДО
+since	prep	«синс» — СИНСЕ — С (какого-то времени)
+before	prep	«бифоо» — БИ-ФОР — ДО
+after	prep	«аафтэ» — АФТЕР — ПОСЛЕ
+against	prep	«эгенст» — А ГЕНСЕК ПРОТИВ — ПРОТИВ
+like	prep	«лайк» — ЛАЙК — КАК
+except	prep	«иксепт» — ЭКСЕПШН — КРОМЕ
+instead of	prep	«инстед ов» — НА МЕСТЕ — ВМЕСТО
+because of	prep	«бикоз ов» — БИ-КОЗА — ИЗ-ЗА
+according to	prep	«экоодин ту» — АККОРД — СОГЛАСНО
+per	prep	«пёё» — ПЕР — ЗА (в расчёте на)
+than	prep	«зэн» — ЗЕН — ЧЕМ
+and	conj	«энд» — ЭНД — И
+but	conj	«бат» — БАТ — НО (БАТЮШКИ, НО)
+or	conj	«оо» — ОР ИЛИ ТИШИНА — ИЛИ
+so	conj	«соу» — СОУС — ПОЭТОМУ
+because	conj	«бикоз» — БИ-КОЗА — ПОТОМУ ЧТО
+if	conj	«иф» — ИФ — ЕСЛИ
+when	conj	«уэн» — ВЕНА: КОГДА ПОЕДЕМ — КОГДА
+while	conj	«уайл» — ВАЙЛ — ПОКА
+although	conj	«оолзоу» — ОЛЬ, ЗОВУ, ХОТЯ — ХОТЯ
+though	conj	«зоу» — ЗОВУ, ХОТЯ — ХОТЯ
+unless	conj	«энлес» — АН-ЛЕСС — ЕСЛИ НЕ
+as	conj	«эз» — ЭЗ — КАК
+than	conj	«зэн» — ЗЕН — ЧЕМ
+that	conj	«зэт» — ЗЕТ — ЧТО
+whether	conj	«уэзэ» — ВЕЗЁТ ЛИ — ЛИ
+until	conj	«антил» — АН-ТИЛЬ — ПОКА НЕ
+since	conj	«синс» — СИНСЕ — С ТЕХ ПОР КАК
+before	conj	«бифоо» — БИ-ФОР — ПРЕЖДЕ ЧЕМ
+after	conj	«аафтэ» — АФТЕР — ПОСЛЕ ТОГО КАК
+once	conj	«уанс» — УАН-РАЗ — КАК ТОЛЬКО
+so that	conj	«соу зэт» — ТАК ЧТО — ЧТОБЫ
+even though	conj	«иивн зоу» — ИВАН ЗОВЁТ — ДАЖЕ ЕСЛИ
+as soon as	conj	«эз суун эз» — КАК СКОРО — КАК ТОЛЬКО
+both … and	conj	«боус … энд» — ОБА … И — И … И
+either … or	conj	«айзэ … оо» — АЙ, ЗА … ИЛИ — ИЛИ … ИЛИ
+neither … nor	conj	«найзэ … ноо» — НАЙ … НОР — НИ … НИ
+zero	num	«зиэроу» — ЗЕРО — НОЛЬ
+one	num	«уан» — ВАНЯ ОДИН — ОДИН
+two	num	«туу» — ТУ-ТУ, ДВА ГУДКА — ДВА
+three	num	«срии» — ТРИ
+four	num	«фоо» — ФОРТОЧКА ЧЕТЫРЁХУГОЛЬНАЯ — ЧЕТЫРЕ
+five	num	«файв» — ФАЙВ ПАЛЬЦЕВ — ПЯТЬ
+six	num	«сикс» — ШЕСТЬ — СИКС
+seven	num	«севн» — СЕВЕН-ЭЛЕВЕН — СЕМЬ
+eight	num	«эйт» — ЭЙ, ТЫ, ВОСЕМЬ — ВОСЕМЬ
+nine	num	«найн» — НАЙН — ДЕВЯТЬ (найн-нет)
+ten	num	«тен» — ТЕННИС ДЕСЯТЬ — ДЕСЯТЬ
+eleven	num	«илевн» — ЕЛЕ ВЕНИК ИЗ 11 — ОДИННАДЦАТЬ
+twelve	num	«туэлв» — ТВЕЛ (двенадцать) — ДВЕНАДЦАТЬ
+thirteen	num	«сёётиин» — ТРИ-ТИН — ТРИНАДЦАТЬ
+fourteen	num	«фоотиин» — ЧЕТЫРЕ-ТИН — ЧЕТЫРНАДЦАТЬ
+fifteen	num	«фифтиин» — ФИФТИ — ПЯТНАДЦАТЬ
+sixteen	num	«сикстиин» — СИКС-ТИН — ШЕСТНАДЦАТЬ
+seventeen	num	«севнтиин» — СЕВЕН-ТИН — СЕМНАДЦАТЬ
+eighteen	num	«эйтиин» — ЭЙТ-ТИН — ВОСЕМНАДЦАТЬ
+nineteen	num	«найнтиин» — НАЙН-ТИН — ДЕВЯТНАДЦАТЬ
+twenty	num	«туэнти» — ТВЕНТИ — ДВАДЦАТЬ
+thirty	num	«сёёти» — ТРИ-ТИ — ТРИДЦАТЬ
+forty	num	«фооти» — ФОРТ НА 40 — СОРОК
+fifty	num	«фифти» — ФИФТИ-ФИФТИ — ПЯТЬДЕСЯТ
+sixty	num	«сиксти» — СИКС-ТИ — ШЕСТЬДЕСЯТ
+seventy	num	«севнти» — СЕВЕН-ТИ — СЕМЬДЕСЯТ
+eighty	num	«эйти» — ЭЙ, ТИ — ВОСЕМЬДЕСЯТ
+ninety	num	«найнти» — НАЙН-ТИ — ДЕВЯНОСТО
+hundred	num	«хандрэд» — ХАНДРА СТО ЛЕТ — СТО
+thousand	num	«саузнд» — САУЗЕНД — ТЫСЯЧА
+million	num	«мильэн» — МИЛЛИОН
+first	num	«фёёст» — ФЁРСТ — ПЕРВЫЙ
+second	num	«сэкэнд» — СЕКУНДАНТ — ВТОРОЙ
+third	num	«сёёд» — ТРЕТИЙ — СЁРДЦЕ ТРЕТЬЕ
+fourth	num	«фоос» — ФОРС — ЧЕТВЁРТЫЙ
+fifth	num	«фифс» — ФИФА — ПЯТЫЙ
+sixth	num	«сикс-с» — СИКС — ШЕСТОЙ
+seventh	num	«севнс» — СЕВЕН — СЕДЬМОЙ
+eighth	num	«эйтс» — ЭЙТ — ВОСЬМОЙ
+ninth	num	«найнс» — НАЙН — ДЕВЯТЫЙ
+tenth	num	«тенс» — ТЕН — ДЕСЯТЫЙ
+eleventh	num	«илевнс» — ИЛЕВН — ОДИННАДЦАТЫЙ
+twelfth	num	«туэлфс» — ТВЕЛ — ДВЕНАДЦАТЫЙ
+twentieth	num	«туэнтиэс» — ТВЕНТИ — ДВАДЦАТЫЙ
+hundredth	num	«хандрэдс» — ХАНДРА — СОТЫЙ
+hello	interj	«хэлоу» — ХЕЛЛОУ — ПРИВЕТ
+hi	interj	«хай» — ХАЙ — ПРИВЕТ
+bye	interj	«бай» — БАЙ-БАЙ — ПОКА
+goodbye	interj	«гудбай» — ГУДБАЙ — ДО СВИДАНИЯ
+oh	interj	«оу» — О! — О!
+wow	interj	«уау» — ВАУ! — ВАУ
+oops	interj	«уупс» — УПС! — ОЙ!
+ouch	interj	«ауч» — АУЧ! — ОЙ, БОЛЬНО!
+hey	interj	«хей» — ЭЙ! — ЭЙ!
+well	interj	«уэл» — ВЕЛЬ, НУ — НУ
+OK	interj	«оукей» — ОКЕЙ — ХОРОШО
+okay	interj	«оукей» — ОКЕЙ — ХОРОШО
+cheers	interj	«чиэз» — ЧИЗ, ВЫПЬЕМ — ВАШЕ ЗДОРОВЬЕ!
+thanks	interj	«сэнкс» — СЕНКС — СПАСИБО
+sorry	interj	«сори» — СОРРИ — ИЗВИНИТЕ
+pardon	interj	«паадн» — ПАРДОН? — ПРОСТИТЕ?
+good morning	phrase	«гуд моонин» — ГУД МОРНИНГ — ДОБРОЕ УТРО
+good afternoon	phrase	«гуд аафтэнуун» — ГУД ПОСЛЕ ПОЛУДНЯ — ДОБРЫЙ ДЕНЬ
+good evening	phrase	«гуд иивнин» — ГУД ИВНИНГ — ДОБРЫЙ ВЕЧЕР
+good night	phrase	«гуд найт» — ГУД НАЙТ — СПОКОЙНОЙ НОЧИ
+how are you?	phrase	«хау аа ю» — ХАУ А Ю — КАК ДЕЛА?
+how do you do?	phrase	«хау ду ю ду» — ХАУ ДУ Ю ДУ — ЗДРАВСТВУЙТЕ (при знакомстве)
+nice to meet you	phrase	«найс ту миит ю» — НАЙС МИТИНГ — ПРИЯТНО ПОЗНАКОМИТЬСЯ
+see you	phrase	«сии ю» — СИ Ю — УВИДИМСЯ
+see you later	phrase	«сии ю лейтэ» — СИ Ю ЛЕЙТЕР — ДО ВСТРЕЧИ
+see you soon	phrase	«сии ю суун» — СИ Ю СУН — ДО СКОРОЙ ВСТРЕЧИ
+take care	phrase	«тейк кэа» — ТЕЙК КЭР — БЕРЕГИ СЕБЯ
+have a nice day	phrase	«хэв э найс дей» — НАЙС ДЕЙ — ХОРОШЕГО ДНЯ
+thank you	phrase	«сэнк ю» — СЕНК Ю — СПАСИБО
+thank you very much	phrase	«сэнк ю вери мач» — СЕНК Ю ВЕРИ МАЧ — БОЛЬШОЕ СПАСИБО
+you're welcome	phrase	«йоо уэлкэм» — ВЕЛКАМ — ПОЖАЛУЙСТА (в ответ)
+not at all	phrase	«нот эт оол» — НОТ ЭТ ОЛЛ — НЕ ЗА ЧТО
+excuse me	phrase	«икскьююз ми» — ЭКСКЬЮЗ МИ — ИЗВИНИТЕ
+I'm sorry	phrase	«айм сори» — АЙМ СОРРИ — МНЕ ЖАЛЬ
+never mind	phrase	«невэ майнд» — НЕВЕР МАЙНД — НИЧЕГО СТРАШНОГО
+no problem	phrase	«ноу проблэм» — НОУ ПРОБЛЕМ — БЕЗ ПРОБЛЕМ
+that's all right	phrase	«зэтс оол райт» — ОЛРАЙТ — ВСЁ В ПОРЯДКЕ
+don't worry	phrase	«доунт уари» — ДОНТ ВАРИ МОЗГ — НЕ ВОЛНУЙСЯ
+of course	phrase	«эв коос» — ОФ КУРС — КОНЕЧНО
+all right	phrase	«оол райт» — ОЛРАЙТ — ХОРОШО
+I don't know	phrase	«ай доунт ноу» — АЙ ДОНТ НОУ — НЕ ЗНАЮ
+I don't understand	phrase	«ай доунт андэстэнд» — АНДЕР-СТЕНД: НЕ СТОЮ ПОД — НЕ ПОНИМАЮ
+could you repeat that?	phrase	«куд ю рипиит зэт» — РЕПИТ — ПОВТОРИТЕ?
+what does it mean?	phrase	«уот даз ит миин» — ВОТ ДАЗ ИТ МИН — ЧТО ЭТО ЗНАЧИТ?
+how much is it?	phrase	«хау мач из ит» — ХАУ МАЧ — СКОЛЬКО СТОИТ?
+what time is it?	phrase	«уот тайм из ит» — ВОТ ТАЙМ — КОТОРЫЙ ЧАС?
+what's your name?	phrase	«уотс йоо нейм» — ВОТ ТВОЙ НЕЙМ — КАК ТЕБЯ ЗОВУТ?
+my name is	phrase	«май нейм из» — МАЙ НЕЙМ — МЕНЯ ЗОВУТ
+where are you from?	phrase	«уэа аа ю фром» — ГДЕ ТЫ ФРОМ — ОТКУДА ТЫ?
+I'm from	phrase	«айм фром» — АЙМ ФРОМ — Я ИЗ
+how old are you?	phrase	«хау оулд аа ю» — ХАУ ОЛД — СКОЛЬКО ТЕБЕ ЛЕТ?
+can I help you?	phrase	«кэн ай хелп ю» — ХЕЛП — ЧЕМ ПОМОЧЬ?
+can I have	phrase	«кэн ай хэв» — КЭН АЙ ХЭВ — МОЖНО МНЕ
+I'd like	phrase	«айд лайк» — АЙД ЛАЙК — Я БЫ ХОТЕЛ
+here you are	phrase	«хиэ ю аа» — ХИЭ Ю А — ВОТ, ПОЖАЛУЙСТА
+help yourself	phrase	«хелп йоселф» — ХЕЛП СЕЛФ — УГОЩАЙТЕСЬ
+enjoy your meal	phrase	«инджой йоо миил» — ЭНДЖОЙ МИЛ — ПРИЯТНОГО АППЕТИТА
+the bill, please	phrase	«зэ бил плииз» — БИЛЛ ПЛИЗ — СЧЁТ, ПОЖАЛУЙСТА
+happy birthday	phrase	«хэпи бёёсдей» — ХЭППИ БЁЗДЕЙ — С ДНЁМ РОЖДЕНИЯ
+merry Christmas	phrase	«мери крисмэс» — МЕРРИ КРИСМАС — СЧАСТЛИВОГО РОЖДЕСТВА
+happy New Year	phrase	«хэпи нью йиэ» — ХЭППИ НЬЮ ЕАР — С НОВЫМ ГОДОМ
+good luck	phrase	«гуд лак» — ГУД ЛАК — УДАЧИ
+well done	phrase	«уэл дан» — ВЕЛЛ ДАН — МОЛОДЕЦ
+congratulations	phrase	«кэнгрэчулейшнз» — КОНГРАТС — ПОЗДРАВЛЯЮ
+bless you	phrase	«блес ю» — БЛЕСК Ю — БУДЬ ЗДОРОВ (при чихании)
+it doesn't matter	phrase	«ит дазнт мэтэ» — НЕ МАТЕРИЯ — НЕ ВАЖНО
+it depends	phrase	«ит дипендз» — ЗАВИСИТ (дипендэнт) — ЗАВИСИТ
+by the way	phrase	«бай зэ уэй» — БАЙ ЗЕ ВЕЙ — КСТАТИ
+for example	phrase	«фор игзаампл» — ФОР ЭКЗЕМПЛЯР — НАПРИМЕР
+in fact	phrase	«ин фэкт» — ИН ФАКТ — НА САМОМ ДЕЛЕ
+at least	phrase	«эт лиист» — ЛИСТ НАИМЕНЬШИЙ — ПО КРАЙНЕЙ МЕРЕ
+at last	phrase	«эт лааст» — ЛАСТ — НАКОНЕЦ
+at first	phrase	«эт фёёст» — ФЁРСТ — СНАЧАЛА
+at once	phrase	«эт уанс» — ВАНС — СРАЗУ
+at the moment	phrase	«эт зэ моумэнт» — МОМЕНТ — В ДАННЫЙ МОМЕНТ
+at home	phrase	«эт хоум» — ХОУМ — ДОМА
+at work	phrase	«эт вёёк» — ВОРК — НА РАБОТЕ
+on time	phrase	«он тайм» — ОН ТАЙМ — ВОВРЕМЯ
+in time	phrase	«ин тайм» — ИН ТАЙМ — ВОВРЕМЯ (успеть)
+on foot	phrase	«он фут» — ФУТ (нога) — ПЕШКОМ
+by car	phrase	«бай каа» — БАЙ КАР — НА МАШИНЕ
+by bus	phrase	«бай бас» — БАЙ БАС — НА АВТОБУСЕ
+on holiday	phrase	«он холидей» — ХОЛИДЕЙ — В ОТПУСКЕ
+on business	phrase	«он бизнис» — ПО БИЗНЕСУ — ПО ДЕЛУ
+in the morning	phrase	«ин зэ моонин» — МОРНИНГ — УТРОМ
+in the evening	phrase	«ин зэ иивнин» — ИВНИНГ — ВЕЧЕРОМ
+at night	phrase	«эт найт» — НАЙТ — НОЧЬЮ
+all the time	phrase	«оол зэ тайм» — ОЛЛ ТАЙМ — ВСЁ ВРЕМЯ
+from time to time	phrase	«фром тайм ту тайм» — ОТ ТАЙМА К ТАЙМУ — ВРЕМЯ ОТ ВРЕМЕНИ
+as well	phrase	«эз уэл» — ЭЗ ВЕЛЛ — ТОЖЕ
+as usual	phrase	«эз юужуэл» — КАК ЮЖНЫЙ ОБЫЧАЙ — КАК ОБЫЧНО
+in general	phrase	«ин дженрэл» — ГЕНЕРАЛЬНО — В ЦЕЛОМ
+on the other hand	phrase	«он зэ азэ хэнд» — НА ДРУГОЙ РУКЕ — С ДРУГОЙ СТОРОНЫ
+in my opinion	phrase	«ин май эпиньэн» — ОПИНИОН — ПО-МОЕМУ
+I think so	phrase	«ай синк соу» — СИНК (думать) ТАК — ДУМАЮ, ДА
+I hope so	phrase	«ай хоуп соу» — ХОУП (надежда) — НАДЕЮСЬ
+I don't think so	phrase	«ай доунт синк соу» — НЕ СИНК — НЕ ДУМАЮ
+what's the matter?	phrase	«уотс зэ мэтэ» — ВОТ МАТЕРИЯ? — В ЧЁМ ДЕЛО?
+what's wrong?	phrase	«уотс рон» — ВОТ УРОН? — ЧТО СЛУЧИЛОСЬ?
+what's up?	phrase	«уотс ап» — ВАЦАП — КАК ДЕЛА?
+how about	phrase	«хау эбаут» — ХАУ ЭБАУТ — КАК НАСЧЁТ
+let's go	phrase	«летс гоу» — ЛЕТС ГОУ — ПОЙДЁМ
+let me see	phrase	«лет ми сии» — ЛЕТ МИ СИ — ДАЙ ПОДУМАТЬ
+just a moment	phrase	«джаст э моумэнт» — ДЖАСТ МОМЕНТ — МИНУТКУ
+wait a minute	phrase	«уэйт э минит» — ВЕЙТ МИНУТУ — ПОДОЖДИ МИНУТКУ
+hurry up	phrase	«хари ап» — ХАРИ АП — ПОТОРОПИСЬ
+be careful	phrase	«бии кэафул» — КЭР — БУДЬ ОСТОРОЖЕН
+look out	phrase	«лук аут» — ЛУК АУТ — ОСТОРОЖНО!
+no way	phrase	«ноу уэй» — НОУ ВЕЙ — НИ ЗА ЧТО
+you know	phrase	«ю ноу» — Ю НОУ — ЗНАЕШЬ ЛИ
+I mean	phrase	«ай миин» — АЙ МИН — Я ИМЕЮ В ВИДУ
+have fun	phrase	«хэв фан» — ХЭВ ФАН — ПОВЕСЕЛИСЬ
+make friends	phrase	«мейк френдз» — МЕЙК ФРЕНДС — ПОДРУЖИТЬСЯ
+make a mistake	phrase	«мейк э мистейк» — МИСТЕЙК — СДЕЛАТЬ ОШИБКУ
+make a decision	phrase	«мейк э дисижн» — ДЕЦИЗИЯ — ПРИНЯТЬ РЕШЕНИЕ
+take a photo	phrase	«тейк э фоутоу» — ТЕЙК ФОТО — СФОТОГРАФИРОВАТЬ
+take a shower	phrase	«тейк э шауэ» — ТЕЙК ШОУ — ПРИНЯТЬ ДУШ
+have breakfast	phrase	«хэв брекфэст» — ХЭВ БРЕКФАСТ — ЗАВТРАКАТЬ
+have a shower	phrase	«хэв э шауэ» — ХЭВ ШАУЭР — ПРИНИМАТЬ ДУШ
+have a rest	phrase	«хэв э рест» — ХЭВ РЕСТ — ОТДЫХАТЬ
+have a good time	phrase	«хэв э гуд тайм» — ГУД ТАЙМ — ХОРОШО ПРОВЕСТИ ВРЕМЯ
+do the shopping	phrase	«ду зэ шопин» — ШОПИНГ — ДЕЛАТЬ ПОКУПКИ
+do homework	phrase	«ду хоумвёёк» — ХОУМВОРК — ДЕЛАТЬ ДОМАШКУ
+pay attention	phrase	«пей этеншн» — ПЛАТИТЬ ВНИМАНИЕМ — ОБРАЩАТЬ ВНИМАНИЕ
+keep in touch	phrase	«киип ин тач» — КИП ИН ТАЧ — ОСТАВАТЬСЯ НА СВЯЗИ
+change your mind	phrase	«чейндж йоо майнд» — ЧЕЙНДЖ МАЙНД — ПЕРЕДУМАТЬ
+once upon a time	phrase	«уанс эпон э тайм» — ВАНС АПОН Э ТАЙМ — ДАВНЫМ-ДАВНО
+access	noun	«эксес» — ЭКСЕСС — ДОСТУП (access)
+accommodation	noun	«экомэдейшн» — АККОМОДАЦИЯ — ЖИЛЬЁ
+achievement	noun	«эчиивмэнт» — АЧИВКА — ДОСТИЖЕНИЕ
+addition	noun	«эдишн» — АДДИШН — ДОБАВЛЕНИЕ
+admission	noun	«эдмишн» — АДМИССИЯ — ВХОД
+advance	noun	«эдваанс» — АВАНС — ПРОДВИЖЕНИЕ
+advertising	noun	«эдвэтайзин» — АДВЕРТАЙЗИНГ — РЕКЛАМА
+agency	noun	«ейджэнси» — АГЕНТСТВО
+agent	noun	«ейджэнт» — АГЕНТ
+alarm	noun	«элаам» — АЛАРМ — ТРЕВОГА
+alarm clock	noun	«элаам клок» — АЛАРМ-ЧАСЫ — БУДИЛЬНИК
+album	noun	«элбэм» — АЛЬБОМ
+alcohol	noun	«элкэхол» — АЛКОГОЛЬ
+alphabet	noun	«элфэбет» — АЛФАВИТ
+ambition	noun	«эмбишн» — АМБИЦИЯ
+amusement park	noun	«эмьюзмэнт паак» — АМУЗ (забавлять) — ПАРК РАЗВЛЕЧЕНИЙ
+announcement	noun	«энаунсмэнт» — АНОНС — ОБЪЯВЛЕНИЕ
+anniversary	noun	«энивёёсэри» — АННИВЕРСАРИЙ — ГОДОВЩИНА
+apartment block	noun	«эпаатмэнт блок» — БЛОК АПАРТАМЕНТОВ — МНОГОКВАРТИРНЫЙ ДОМ
+appearance	noun	«эпиэрэнс» — ПОЯВЛЕНИЕ (appear) — ВНЕШНОСТЬ
+appetite	noun	«эпитайт» — АППЕТИТ
+application	noun	«эпликейшн» — АППЛИКАЦИЯ — ЗАЯВЛЕНИЕ
+area code	noun	«эриэ коуд» — КОД АРЕАЛА — ТЕЛЕФОННЫЙ КОД
+arrow	noun	«эроу» — ЭРОС — СТРЕЛА
+assistant	noun	«эсистэнт» — АССИСТЕНТ — ПОМОЩНИК

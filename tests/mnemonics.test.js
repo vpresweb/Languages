@@ -21,10 +21,10 @@ test('ассоциации: слово из очереди «Учить» пол
 });
 
 for (const lang of ['pt', 'en']) {
-  test(`${lang}: ассоциации есть для всех 2000 самых частых слов`, () => {
+  test(`${lang}: ассоциации есть для всех 3000 самых частых слов`, () => {
     const map = JSON.parse(readFileSync(`data/mnemonics-${lang}.json`, 'utf8'));
-    const top = JSON.parse(readFileSync(`data/words-${lang}.json`, 'utf8')).slice(0, 2000);
-    assert.ok(Object.keys(map).length >= 2000);
+    const top = JSON.parse(readFileSync(`data/words-${lang}.json`, 'utf8')).slice(0, 3000);
+    assert.ok(Object.keys(map).length >= 3000);
     assert.ok(top.every((e) => map[`${e.word}|${e.pos}`]));
   });
 }
