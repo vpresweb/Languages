@@ -64,13 +64,16 @@ export function createWords(root, { navigate }) {
 
   function show(name) {
     if (!SUBVIEWS.includes(name)) name = 'today';
-    // Открытое занятие не прерываем, если адрес не менялся (например, вернулись на вкладку).
-    if (name === 'today' && current === 'session' && session.isActive()) name = 'session';
+    // Открытое занятие при уходе на другую вкладку замирает, а при возврате на «Сегодня»
+    // продолжается с того же места.
+    if (name === 'today' && session.isActive()) name = 'session';
     // Адрес занятия после перезагрузки: продолжить сохранённое, а если нечего — на «Сегодня».
     if (name === 'session' && state.lang && !session.isActive() && !session.resume()) name = 'today';
     current = name;
-    if (name !== 'session') session.stop();
-    if (name !== 'stream') stream.stop();
+    if (name === 'session') session.wake();
+    else session.suspend();
+    if (name === 'stream') stream.wake();
+    else stream.suspend();
     if (name !== 'flash') flash.stop();
     for (const view of SUBVIEWS) $(`${view}-view`).hidden = view !== name;
     const tab = name === 'session' ? 'today' : name;
@@ -257,5 +260,12 @@ export function createWords(root, { navigate }) {
     if (!root.hidden && current === 'today') renderToday();
   }
 
-  return { setLang, show, stop, refresh, isBusy: () => session.isActive() || stream.isRunning() };
+  // Уход из раздела «Слова»: занятие и поток замирают и продолжатся при возврате.
+  function suspend() {
+    session.suspend();
+    stream.suspend();
+    flash.stop();
+  }
+
+  return { setLang, show, stop, suspend, refresh, isBusy: () => session.isActive() || stream.isRunning() };
 }

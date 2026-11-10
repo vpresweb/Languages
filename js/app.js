@@ -29,9 +29,31 @@ function parseHash(hash, fallbackLang) {
   return { lang: l, section: s, sub: sub || DEFAULT_SUB[s] };
 }
 
+// Последний подраздел каждого раздела (по языкам): ссылка раздела ведёт туда, где были.
+const LAST_SUBS_KEY = 'languages.lastSubs';
+function loadLastSubs() {
+  try {
+    const data = JSON.parse(localStorage.getItem(LAST_SUBS_KEY));
+    return data && typeof data === 'object' ? data : {};
+  } catch { return {}; }
+}
+function saveLastSubs(data) {
+  try { localStorage.setItem(LAST_SUBS_KEY, JSON.stringify(data)); } catch { /* без памяти */ }
+}
+const lastSub = loadLastSubs();
+const sectionSub = (lang, section) => {
+  const sub = lastSub[lang]?.[section];
+  return typeof sub === 'string' ? sub : '';
+};
+
+// Звук в курсе (озвучка в iframe того же сайта) при уходе в другой раздел — остановить.
+function stopCourseMedia() {
+  try { $('course-frame')?.contentWindow?.speechSynthesis?.cancel(); } catch { /* другой сайт */ }
+}
+
 function updateLinks() {
   document.querySelectorAll('.tabs [data-section]').forEach((a) => {
-    a.href = href(route.lang, a.dataset.section);
+    a.href = href(route.lang, a.dataset.section, sectionSub(route.lang, a.dataset.section));
     if (a.dataset.section === route.section) a.setAttribute('aria-current', 'page');
     else a.removeAttribute('aria-current');
   });
@@ -54,9 +76,15 @@ async function apply() {
   setSpeechLang(route.lang);
   updateLinks();
 
+  lastSub[route.lang] = { ...lastSub[route.lang], [route.section]: route.sub };
+  saveLastSubs(lastSub);
+  updateLinks();
+
   for (const s of SECTIONS) $(`${s}-section`).hidden = s !== route.section;
-  if (route.section !== 'words') words.stop();
-  if (route.section !== 'courses') courses.show('');
+  if (route.section !== 'words') words.suspend();
+  // Курс не выгружается при уходе в другой раздел — при возврате он открыт там же
+  // (выгружается только при выходе к списку курсов или смене языка).
+  if (route.section !== 'courses') stopCourseMedia();
   document.body.classList.toggle('wide', route.section === 'courses' && Boolean(route.sub));
 
   if (route.section === 'dict') {
