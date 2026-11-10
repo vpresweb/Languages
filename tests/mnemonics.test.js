@@ -20,9 +20,11 @@ test('ассоциации: слово из очереди «Учить» пол
   assert.equal(compactEntry({ word: 'ler', pos: 'verb', translations: ['читать'], mnemonic: 'М' }).mnemonic, 'М');
 });
 
-test('португальский: 1000 ассоциаций на 1000 самых частых слов', () => {
-  const map = JSON.parse(readFileSync('data/mnemonics-pt.json', 'utf8'));
-  const top = JSON.parse(readFileSync('data/words-pt.json', 'utf8')).slice(0, 1000);
-  assert.equal(Object.keys(map).length, 1000);
-  assert.ok(top.every((e) => map[`${e.word}|${e.pos}`]));
-});
+for (const lang of ['pt', 'en']) {
+  test(`${lang}: 1000 ассоциаций на 1000 самых частых слов`, () => {
+    const map = JSON.parse(readFileSync(`data/mnemonics-${lang}.json`, 'utf8'));
+    const top = JSON.parse(readFileSync(`data/words-${lang}.json`, 'utf8')).slice(0, 1000);
+    assert.equal(Object.keys(map).length, 1000);
+    assert.ok(top.every((e) => map[`${e.word}|${e.pos}`]));
+  });
+}
