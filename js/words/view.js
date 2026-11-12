@@ -2,7 +2,7 @@
 import { LANGUAGES, loadWords, mergeQueue } from './data.js';
 import { loadMnemonics } from '../mnemonics.js';
 import { summary, forecast, freshWords, wordsForSource, SOURCES, dayKey } from './session.js';
-import { loadProgress, saveProgress, loadSettings, saveSettings, validProgress, emptyProgress } from './storage.js';
+import { loadProgress, saveProgress, loadSettings, saveSettings, validProgress, emptyProgress, loadMyMnemonics } from './storage.js';
 import { createSession, nextDueText, startedToday } from './learn.js';
 import { createStream } from './stream.js';
 import { createFlash } from './flash.js';
@@ -35,7 +35,15 @@ export function createWords(root, { navigate }) {
 
   const save = () => saveProgress(state.lang, state.progress);
   const wordsFor = (kind) => wordsForSource(kind, state.words, state.progress, state.settings, Date.now());
-  const rebuild = () => { state.words = mergeQueue(state.core, state.progress.queue, state.mnemonics); };
+  // Свои ассоциации (из словаря) важнее встроенных — и у слов из очереди, и у основных.
+  const rebuild = () => {
+    const own = loadMyMnemonics(state.lang);
+    const merged = mergeQueue(state.core, state.progress.queue, { ...state.mnemonics, ...own });
+    state.words = merged.map((e) => {
+      const text = own[`${e.word}|${e.pos}`];
+      return text && text !== e.mnemonic ? { ...e, mnemonic: text } : e;
+    });
+  };
 
   const session = createSession($('session-view'), {
     get: () => state,

@@ -167,7 +167,10 @@ kbd { font: inherit; font-size: .8em; opacity: .7; margin-left: 6px; }
 .example { color: var(--muted); max-width: 520px; }
 .example .speak { color: var(--text); }
 /* Ассоциация-созвучие для запоминания слова */
-.mnemonic { display: block; margin: 6px 0 0; padding: 6px 10px; border-radius: 8px; background: color-mix(in srgb, #F5A623 14%, transparent); color: var(--text); font-size: .95rem; max-width: 520px; }
+.my-mnemonic-edit { margin-top: 6px; font-size: .9rem; }
+.my-mnemonic { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; padding: 8px 10px; border-radius: 8px; background: color-mix(in srgb, #F5A623 10%, transparent); max-width: 520px; }
+.my-mnemonic-label { font-size: .9rem; color: var(--muted, inherit); }
+.my-mnemonic input { width: 100%; box-sizing: border-box; font: inherit; padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg, transparent); color: var(--text); }.mnemonic { display: block; margin: 6px 0 0; padding: 6px 10px; border-radius: 8px; background: color-mix(in srgb, #F5A623 14%, transparent); color: var(--text); font-size: .95rem; max-width: 520px; }
 .card-front { display: flex; flex-direction: column; gap: 8px; align-items: center; }
 .card-back { display: flex; flex-direction: column; gap: 8px; align-items: center; border-top: 1px solid var(--border); padding-top: 12px; margin-top: 6px; width: 100%; }
 .card-back[hidden] { display: none; }

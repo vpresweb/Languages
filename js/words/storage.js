@@ -75,6 +75,26 @@ export function enqueue(lang, item) {
   return true;
 }
 
+// Свои ассоциации пользователя: { "слово|часть речи": "текст" } по языкам. Важнее встроенных.
+// Ключ с префиксом wordmem.v1. — синхронизируется с учётной записью.
+const MY_MNEMONICS_KEY = (lang) => `wordmem.v1.mnemonics.${lang}`;
+export const MY_MNEMONIC_MAX = 300;
+
+export function loadMyMnemonics(lang) {
+  const data = read(MY_MNEMONICS_KEY(lang));
+  if (!data || typeof data !== 'object' || Array.isArray(data)) return {};
+  return Object.fromEntries(Object.entries(data).filter(([, v]) => typeof v === 'string' && v.trim()));
+}
+
+// Пустой текст — удалить свою ассоциацию (вернётся встроенная, если есть).
+export function saveMyMnemonic(lang, id, text) {
+  const all = loadMyMnemonics(lang);
+  const clean = String(text ?? '').replace(/\s+/g, ' ').trim().slice(0, MY_MNEMONIC_MAX);
+  if (clean) all[id] = clean;
+  else delete all[id];
+  return write(MY_MNEMONICS_KEY(lang), all);
+}
+
 export function saveProgress(lang, progress) {
   return write(PROGRESS_KEY(lang), progress);
 }

@@ -2,7 +2,7 @@
 // Языковая часть (поиск, вывод статей, тест) — в dict/en и dict/pt; здесь — общий интерфейс
 // и кнопка «Учить», которая отправляет слово в раздел «Слова».
 import { compactEntry } from './words/data.js';
-import { loadProgress, enqueue } from './words/storage.js';
+import { loadProgress, enqueue, loadMyMnemonics, saveMyMnemonic, MY_MNEMONIC_MAX } from './words/storage.js';
 import { escapeHtml } from './words/data.js';
 import { loadDictState, saveDictState } from './state.js';
 import { loadMnemonics, attachMnemonics } from './mnemonics.js';
@@ -45,6 +45,38 @@ export function createDictionary(root, { onLearn }) {
     return `<button type="button" class="learn-button" data-learn="${index}" title="Добавить в раздел «Слова»">＋ Учить</button>`;
   }
 
+  // Своя ассоциация: у слов в изучении — ссылка «✎», после «Учить» у слова без ассоциации
+  // поле открывается само. editing — слово, у которого поле сейчас открыто.
+  let editing = null;
+  function myMnemonicHtml(entry, index, state, own) {
+    if (state === 'new') return '';
+    const has = Boolean(own[id(entry)]);
+    if (editing !== id(entry)) {
+      return `<button type="button" class="link-button my-mnemonic-edit" data-mm-edit="${index}">
+        ✎ ${has ? 'Изменить свою ассоциацию' : 'Своя ассоциация'}</button>`;
+    }
+    return `
+      <form class="my-mnemonic" data-mm-form="${index}">
+        <label class="my-mnemonic-label" for="mm-input">💡 Своя ассоциация — фраза, похожая на слово по звучанию</label>
+        <input id="mm-input" type="text" maxlength="${MY_MNEMONIC_MAX}" autocomplete="off"
+          placeholder="например: abatanado — а ботану надо" value="${escapeHtml(own[id(entry)] ?? '')}">
+        <div class="row-buttons">
+          <button type="submit">Сохранить</button>
+          <button type="button" class="link-button" data-mm-cancel>Отмена</button>
+          ${has ? '<button type="button" class="link-button" data-mm-delete>Удалить свою</button>' : ''}
+        </div>
+      </form>`;
+  }
+
+  // Статья словаря со своей ассоциацией вместо встроенной и полем для неё.
+  function renderFound(entry, index, progress, own) {
+    const shown = own[id(entry)] ? { ...entry, mnemonic: own[id(entry)] } : entry;
+    const html = mod.renderEntry(shown, learnButton(progress, entry, index));
+    const at = html.lastIndexOf('</li>');
+    const extra = myMnemonicHtml(entry, index, learnState(progress, entry), own);
+    return at < 0 ? html + extra : html.slice(0, at) + extra + html.slice(at);
+  }
+
   function currentMode() {
     return form.querySelector('input[name="mode"]:checked')?.value ?? 'all';
   }
@@ -54,7 +86,8 @@ export function createDictionary(root, { onLearn }) {
     const query = input.value;
     found = mod.search(entries, query, currentMode());
     const progress = loadProgress(lang);
-    results.innerHTML = found.map((e, i) => mod.renderEntry(e, learnButton(progress, e, i))).join('');
+    const own = loadMyMnemonics(lang);
+    results.innerHTML = found.map((e, i) => renderFound(e, i, progress, own)).join('');
     clearButton.hidden = !query;
     if (!query.trim()) {
       status.textContent = `В словаре ${entries.length.toLocaleString('ru-RU')} слов. Начните вводить слово.`;
@@ -142,7 +175,10 @@ export function createDictionary(root, { onLearn }) {
   let initial = new URLSearchParams(location.search).get('q');
   if (initial) input.value = initial;
 
-  input.addEventListener('input', update);
+  input.addEventListener('input', () => {
+    editing = null; // новый поиск — открытое поле своей ассоциации закрывается
+    update();
+  });
   // Только переключатель направления: change от поля поиска приходит при потере фокуса,
   // и перерисовка под курсором съедала бы первый клик.
   form.addEventListener('change', (event) => {
@@ -161,13 +197,56 @@ export function createDictionary(root, { onLearn }) {
     input.value = hint.dataset.hint;
     update();
   });
+  // Перерисовать результаты, не сбивая прокрутку и не меняя адрес.
+  function rerender() {
+    const y = window.scrollY;
+    update();
+    window.scrollTo(0, y);
+    results.querySelector('.my-mnemonic input')?.focus({ preventScroll: true });
+  }
+
   results.addEventListener('click', (event) => {
-    const button = event.target.closest('[data-learn]');
-    if (!button || !mod) return;
-    const entry = found[Number(button.dataset.learn)];
+    if (!mod) return;
+    const learn = event.target.closest('[data-learn]');
+    if (learn) {
+      const entry = found[Number(learn.dataset.learn)];
+      if (!entry) return;
+      enqueue(lang, compactEntry(entry, mod.firstExample(entry)));
+      // Нет ни встроенной, ни своей ассоциации — сразу предложить свою.
+      if (!entry.mnemonic && !loadMyMnemonics(lang)[id(entry)]) editing = id(entry);
+      rerender();
+      onLearn?.(lang);
+      return;
+    }
+    const edit = event.target.closest('[data-mm-edit]');
+    if (edit) {
+      const entry = found[Number(edit.dataset.mmEdit)];
+      if (entry) editing = id(entry);
+      rerender();
+      return;
+    }
+    const form = event.target.closest('[data-mm-form]');
+    if (!form) return;
+    const entry = found[Number(form.dataset.mmForm)];
+    if (event.target.closest('[data-mm-cancel]')) {
+      editing = null;
+      rerender();
+    } else if (event.target.closest('[data-mm-delete]') && entry) {
+      saveMyMnemonic(lang, id(entry), '');
+      editing = null;
+      rerender();
+      onLearn?.(lang);
+    }
+  });
+  results.addEventListener('submit', (event) => {
+    const form = event.target.closest('[data-mm-form]');
+    if (!form || !mod) return;
+    event.preventDefault();
+    const entry = found[Number(form.dataset.mmForm)];
     if (!entry) return;
-    enqueue(lang, compactEntry(entry, mod.firstExample(entry)));
-    button.outerHTML = '<span class="learn-state">✓ в очереди</span>';
+    saveMyMnemonic(lang, id(entry), form.querySelector('input').value);
+    editing = null;
+    rerender();
     onLearn?.(lang);
   });
 
