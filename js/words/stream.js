@@ -205,18 +205,20 @@ export function createStream(root, ctx) {
     const alive = () => running && run === id;
     const lang = ctx.lang();
     let silent = 0; // сколько слов подряд не удалось озвучить
+    let muted = 0; // слов без звука с последней попытки озвучить
     while (alive()) {
       const entry = nextEntry();
       const delay = revealDelay();
       const after = delay > 0;
       const reverse = isReverse();
       showWord(entry, reverse, !after);
-      if (silent >= 2) {
-        // Два слова подряд не озвучились — дальше без звука, чтобы поток не тормозил.
-        // Ответ — строго после своего слова (раньше таймер ответа мог сработать уже на следующем
-        // слове и показать чужой перевод), затем пауза по шкале «Время на слово».
+      if (silent >= 2 && muted < 2) {
+        // Два слова подряд не озвучились — пара слов без звука, чтобы поток не тормозил,
+        // затем новая попытка. Ответ — строго после своего слова (раньше таймер ответа мог
+        // сработать уже на следующем слове и показать чужой перевод), затем пауза по шкале.
+        muted += 1;
         count();
-        counter.textContent += ' · озвучка не отвечает: нажмите «Пауза» и снова «Запустить»';
+        counter.textContent += ' · озвучка не отвечает, пробую снова';
         if (after) {
           await pause(delay);
           if (!alive()) return;
@@ -225,6 +227,15 @@ export function createStream(root, ctx) {
         await pause(Math.max(1000, Number(speed.value) * 1000));
         if (!alive()) return;
         continue;
+      }
+      muted = 0;
+      if (silent) {
+        // Прошлое слово не озвучилось — сбросить синтезатор, как это делают «Пауза» и «Запустить»
+        // (зависшую фразу Chrome сам не отпускает, и новые встают за ней в очередь).
+        stopSpeech();
+        unlockSpeech();
+        await pause(300);
+        if (!alive()) return;
       }
       const sayWord = () => speakAndWait(entry.word, lang);
       const sayTranslation = () => speakAndWait(spokenTranslation(entry), 'ru');
@@ -248,7 +259,7 @@ export function createStream(root, ctx) {
       if (silent) {
         // Озвучка не работает — поток всё равно идёт, но с паузой, чтобы слово успели прочитать.
         counter.textContent += ' · озвучка не отвечает';
-        await wait(1500);
+        await pause(1500);
       } else {
         // Время на осмысление после перевода — по шкале «Время на слово». Тишина идёт через
         // <audio>, поэтому не растягивается и в свёрнутой вкладке.
