@@ -176,6 +176,7 @@ export function speakAndWait(text, language = lang) {
 // прямо в обработчике нажатия. Вызывать синхронно из обработчика клика.
 export function unlockSpeech() {
   if (!speechSupported()) return;
+  playbackSession();
   const utterance = new SpeechSynthesisUtterance(' ');
   utterance.volume = 0;
   queued.add(utterance);
@@ -186,8 +187,18 @@ export function unlockSpeech() {
 }
 
 // onVoice(found) вызывается, когда становится известно, есть ли в системе голос языка.
+// iPhone в беззвучном режиме глушит звук страницы. Сессия «playback» (Safari 16.4+) звучит
+// и при нём, как плеер.
+function playbackSession() {
+  try {
+    const session = navigator.audioSession;
+    if (session && session.type !== 'playback') session.type = 'playback';
+  } catch { /* браузер без Audio Session API */ }
+}
+
 export function initSpeech(onVoice) {
   onVoiceChange = onVoice;
+  playbackSession();
   if (!speechSupported()) {
     document.documentElement.classList.add('no-speech');
     return;
