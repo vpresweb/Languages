@@ -78,7 +78,7 @@ test('сводка и прогноз', () => {
   const s = summary(words, p, NOW);
   assert.equal(s.started, 3);
   assert.equal(s.learned, 1);
-  assert.equal(s.learning, 1);
+  assert.equal(s.learning, 2);
   assert.equal(s.due, 1);
   assert.deepEqual(forecast(p, NOW, 3), [1, 1, 0]);
 });

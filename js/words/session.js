@@ -143,7 +143,8 @@ export function summary(words, progress, now) {
   return {
     total: words.length,
     started: cards.length,
-    learning: cards.filter(isLearning).length,
+    // В изучении — все начатые, но ещё не запомненные надолго (как набор «В изучении» в потоке).
+    learning: cards.filter((c) => !isLearned(c)).length,
     learned: cards.filter(isLearned).length,
     due: dueWords(words, progress, now).length,
     streak: streak(progress.days, now),
