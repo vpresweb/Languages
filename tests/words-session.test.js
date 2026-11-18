@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  wordId, dayKey, freshWords, dueWords, pickNext, streak, summary, forecast, markDay, wordsForSource, sample, LEARN_AHEAD,
+  wordId, dayKey, freshWords, dueWords, pickNext, streak, bestStreak, summary, forecast, markDay, wordsForSource, sample, LEARN_AHEAD,
 } from '../js/words/session.js';
 import { newCard, review, GOOD, EASY, MINUTE, DAY } from '../js/words/srs.js';
 
@@ -68,6 +68,15 @@ test('серия дней: считается от сегодня или вче�
   assert.equal(streak([day(-3), day(-2), day(-1)], NOW), 3);
   assert.equal(streak([day(-3), day(-2)], NOW), 0);
   assert.equal(streak([], NOW), 0);
+});
+
+test('рекорд серии — самая длинная серия, даже если она прервалась', () => {
+  const day = (offset) => dayKey(NOW + offset * DAY);
+  const days = [day(-12), day(-11), day(-10), day(-9), day(-5), day(-4), day(0)];
+  assert.equal(bestStreak(days), 4);
+  assert.equal(streak(days, NOW), 1);
+  assert.equal(bestStreak([day(-1), day(0), day(0)]), 2);
+  assert.equal(bestStreak([]), 0);
 });
 
 test('сводка и прогноз', () => {

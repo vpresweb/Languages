@@ -137,6 +137,21 @@ export function streak(days, now) {
   return count;
 }
 
+// Самая длинная серия дней подряд за всю сохранённую историю занятий.
+export function bestStreak(days) {
+  const set = new Set(days);
+  let best = 0;
+  for (const key of set) {
+    const [y, m, d] = key.split('-').map(Number);
+    const noon = new Date(y, m - 1, d, 12).getTime(); // полдень — переход на летнее время не сдвинет день
+    if (set.has(dayKey(noon - DAY))) continue; // не первый день серии
+    let count = 0;
+    for (let t = noon; set.has(dayKey(t)); t += DAY) count += 1;
+    best = Math.max(best, count);
+  }
+  return best;
+}
+
 export function summary(words, progress, now) {
   const ids = new Set(words.map(wordId));
   const cards = Object.entries(progress.cards).filter(([id]) => ids.has(id)).map(([, c]) => c);
@@ -148,6 +163,7 @@ export function summary(words, progress, now) {
     learned: cards.filter(isLearned).length,
     due: dueWords(words, progress, now).length,
     streak: streak(progress.days, now),
+    bestStreak: bestStreak(progress.days),
   };
 }
 

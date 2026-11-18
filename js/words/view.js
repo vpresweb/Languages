@@ -117,7 +117,7 @@ export function createWords(root, { navigate }) {
       stat(fresh, 'новых слов сегодня'),
       stat(s.learning, 'в изучении'),
       stat(s.learned, 'запомнено надолго'),
-      stat(s.streak, 'дней подряд'),
+      stat(s.streak, s.bestStreak > s.streak ? `дней подряд · рекорд ${s.bestStreak}` : 'дней подряд'),
       stat(`${s.started} / ${s.total}`, 'начато слов'),
     ].join('');
     // Сколько начатых слов на каждом уровне проверки.
